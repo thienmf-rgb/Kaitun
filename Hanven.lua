@@ -4217,67 +4217,8 @@ L_1_[31] = function(L_32_arg0, L_33_arg1, L_34_arg2)
         task.wait(0.1)
     end
 end
-	L_35_[13] = (L_35_[10]["Position"] - L_35_[9]["Position"])["Magnitude"]
-	if L_35_[13] > 3000 and L_35_[7]["Health"] > 0 then
-		local L_36_ = {}
-		L_36_[1] = {
-			{
-				Vector3["new"](61163.85, 11.67, 1819.78),
-				"Old_World"
-			},
-			{
-				Vector3["new"](-4607.82, 872.54, -1667.55);
-				"Old_World"
-			};
-			{
-				Vector3["new"](-7894.61, 5547.14, -380.29),
-				"Old_World"
-			},
-			{
-				Vector3["new"](923.21, 126.97, 32852.83);
-				"New_World"
-			};
-			{
-				Vector3["new"](-2953.31, 41.01, 2099.17);
-				"Old_World"
-			}
-		}
-		for L_37_forvar0, L_38_forvar1 in pairs(L_36_[1]) do
-			local L_39_ = {}
-			L_39_[3], L_39_[1] = L_37_forvar0, L_38_forvar1
-			if _G[L_39_[1][2]] and (L_39_[1][1] - L_35_[10]["Position"])["Magnitude"] <= 2300 then
-				(game:GetService("ReplicatedStorage"))["Remotes"]["CommF_"]:InvokeServer("requestEntrance", L_39_[1][1])
-				break
-			end
-		end
-	end
-	L_1_[13] = tick()
-	L_1_[32]()
-	L_35_[6] = (L_35_[10]["Position"] - L_35_[9]["Position"])["Magnitude"]
-	L_35_[9]["CFrame"] = CFrame["new"](L_35_[9]["Position"]["X"], L_35_[10]["Position"]["Y"], L_35_[9]["Position"]["Z"])
-	if L_35_[6] < 130 then
-		pcall(function()
-			L_35_[9]["CFrame"] = L_35_[10]
-		end)
-		return
-	elseif L_35_[6] < L_35_[11] then
-		L_35_[12] = 350
-	end
-	for L_40_forvar0, L_41_forvar1 in pairs(L_1_[35]["Character"]:GetDescendants()) do
-		local L_42_ = {}
-		L_42_[2], L_42_[3] = L_40_forvar0, L_41_forvar1
-		if L_42_[3]:IsA("BasePart") and L_42_[3]["CanCollide"] then
-			L_42_[3]["CanCollide"] = false
-		end
-	end
-	L_35_[8] = L_35_[6] / L_35_[12]
-	L_35_[2] = TweenInfo["new"](L_35_[8], Enum["EasingStyle"]["Linear"])
-	L_35_[5] = {
-		["CFrame"] = L_35_[10]
-	}
-	L_1_[47] = (game:GetService("TweenService")):Create(L_35_[9], L_35_[2], L_35_[5])
-	L_1_[47]:Play()
-end
+
+-- ✅ HÀM L_1_[14] BẮT ĐẦU TỪ ĐÂY
 L_1_[14] = function()
 	if God_Human_C_M then
 		local L_43_ = {}
