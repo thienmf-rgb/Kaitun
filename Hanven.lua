@@ -4002,6 +4002,12 @@ L_1_[31] = function(L_32_arg0, L_33_arg1, L_34_arg2)
         task.wait(0.1)
     end
 end
+-- === ANTI CRASH BAN ĐẦU ===
+pcall(function()
+    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetTeam","Marines")
+end)
+
+print("Haven Hub Loading...")
 
 -- ✅ HÀM L_1_[14] BẮT ĐẦU TỪ ĐÂY
 L_1_[14] = function()
