@@ -146,7 +146,7 @@ local Enemies = workspace:WaitForChild("Enemies")
 local Lighting = game:GetService("Lighting")
 
 L_1_[46] = ReplicatedStorage
-
+L_1_[25] = game:GetService("ReplicatedStorage")
 -- === SỬA RACEMAP - ĐỔI KEY TRÙNG ===
 local raceMap = {
     ["The Unleashed"] = {Race = "Human", Version = 2},
