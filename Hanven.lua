@@ -1,28 +1,4 @@
 local startTime = tick()
-local L_1_ = {}
-L_1_[3] = table["concat"]
-L_1_[29] = game:GetService("Players")
-L_1_[5] = L_1_[29]["LocalPlayer"]
-L_1_[30] = game["PlaceId"]
-L_1_[19] = game:GetService("Workspace")
-L_1_[40] = L_1_[19]:WaitForChild("Enemies")
-L_1_[10] = game:GetService("TeleportService")
-L_1_[7] = game:GetService("ReplicatedStorage")
-L_1_[24] = (L_1_[5]:WaitForChild("Data")):WaitForChild("Level")
-L_1_[17] = (L_1_[5]:WaitForChild("Data")):WaitForChild("Fragments")
-L_1_[1] = (L_1_[5]:WaitForChild("Data")):WaitForChild("Beli")
-L_1_[48] = require(L_1_[7]["Modules"]["Net"])
-L_1_[16] = game:GetService("Lighting")
-L_1_[2] = game:service("VirtualInputManager")
-L_1_[33] = game:service("VirtualUser")
-L_1_[4] = game:GetService("CoreGui")
-L_1_[45] = {}
-L_1_[35] = L_1_[5]  -- Gán L_1_[35] = LocalPlayer
-
-local MyLevel = L_1_[24]["Value"]
-local World1, World2, World3 = false, false, false
-local Old_World, New_World, Three_World = false, false, false
-
 local worldMap = {
     [85211729168715] = true,
     [79091703265657] = true,
@@ -34,18 +10,14 @@ local RunService = game:GetService("RunService")
 if worldMap[game.PlaceId] then
     if game.PlaceId == 85211729168715 then
         World1 = true
-        Old_World = true
     elseif game.PlaceId == 79091703265657 then
         World2 = true
-        New_World = true
     elseif game.PlaceId == 100117331123089 then
         World3 = true
-        Three_World = true
     end
 else
     print("Game Not Support")
 end
-
 local player = game.Players.LocalPlayer
 local Player = player
 if not getgenv().SettingFarm then
@@ -54,7 +26,7 @@ if not getgenv().SettingFarm then
         ["White Screen"] = false,
         ["Black Screen"] = false,
         ["Lock Fps"] = {
-            ["Enabled"] = true,
+            ["Enabled"] = false,
             ["FPS"] = 20,
         },
         ["HOP Delay"] = {
@@ -63,7 +35,7 @@ if not getgenv().SettingFarm then
         },
         ["Auto Chat"] = {
             ["Enabled"] = false,
-            ["Text"] = "Haven hub"
+            ["Text"] = "Lonely Hub On Top" -- or {"msg 1", "msg2", "msg3"}
         },
         ["Quest"] = {
             ["Evo Race V1"] = true,
@@ -82,7 +54,7 @@ if not getgenv().SettingFarm then
             ["Iron Mace"] = false,
             ["Saber"] = true,
             ["Pole (1st Form)"] = false,
-            ["Gravity Blade"] = false,
+            ["Gravity Blade"] = true,
             ["Longsword"] = false,
             ["Rengoku"] = false,
             ["Midnight Blade"] = false,
@@ -95,87 +67,50 @@ if not getgenv().SettingFarm then
         ["Gun"] = {
             ["Skull Guitar"] = true,
             ["Kabucha"] = true,
-            ["Venom Bow"] = false,
+            ["Venom Bow"] = true,
             ["Musket"] = true,
             ["Flintlock"] = true,
             ["Refined Slingshot"] = true,
-            ["Magma Blaster"] = false,
+            ["Magma Blaster"] = true,
             ["Dual Flintlock"] = true,
-            ["Cannon"] = false,
-            ["Bizarre Revolver"] = false,
-            ["Bazooka"] = false
+            ["Cannon"] = true,
+            ["Bizarre Revolver"] = true,
+            ["Bazooka"] = true
         },
         ["Webhook"] = {
             ["Enabled"] = true,
-            ["WebhookUrl"] = "",
-            ["Ping Mode"] = "Role",
-            ["Ping Id"] = "1459162021260955744",
+            ["WebhookUrl"] = "https://discord.com/api/webhooks/1459161372100137036/RQjPgytoAOhx3HX6nmdNyLPP8UXXFwklZIsJ0sg4McrpXPmfIh7hH_La_tCSO-Ba-B9o",
+            ["Ping Mode"] = "Role", -- Everyone / Here / User / Role / None
+            ["Ping Id"] = "1459162021260955744", -- Set none if you're using everyone/none
         },
         ["FPS Booster"] = true
     }
 end
--- === FORCE SHOW UI ===
-print("Haven Hub is loading UI...")
 
-local CoreGui = game:GetService("CoreGui")
-local TweenService = game:GetService("TweenService")
-
--- Tạo UI đơn giản để test
-local TestUI = Instance.new("ScreenGui")
-TestUI.Name = "HavenHub_Debug"
-TestUI.ResetOnSpawn = false
-TestUI.Parent = CoreGui
-
-local Frame = Instance.new("Frame")
-Frame.Size = UDim2.new(0, 400, 0, 200)
-Frame.Position = UDim2.new(0.5, -200, 0.5, -100)
-Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 40)
-Frame.BorderSizePixel = 0
-Frame.Parent = TestUI
-
-local Text = Instance.new("TextLabel")
-Text.Size = UDim2.new(1, 0, 1, 0)
-Text.BackgroundTransparency = 1
-Text.Text = "Haven Hub Loaded!\nNếu thấy cái này thì UI hoạt động.\n\nNhấn F9 xem console để biết lỗi."
-Text.TextColor3 = Color3.fromRGB(0, 255, 255)
-Text.TextScaled = true
-Text.Font = Enum.Font.GothamBold
-Text.Parent = Frame
-
-print("✅ Test UI Created!")
--- === SỬA TASK.WAIT ===
 repeat
     if not game.Players.LocalPlayer.Team then
         pcall(function()
             if game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("Main (minimal)")["ChooseTeam"].Container.Marines.Frame:WaitForChild("TextButton").Visible and game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Main (minimal)")["ChooseTeam"].Container.Marines.Frame:WaitForChild("TextButton").Active then
                 game:GetService("GuiService").SelectedObject = game:GetService("Players").LocalPlayer.PlayerGui:WaitForChild("Main (minimal)").ChooseTeam.Container.Marines.Frame:WaitForChild("TextButton")
-                task.wait(0.001)  -- Sửa từ 0.000000000000001
+                task.wait(0.000000000000001)
                 game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.Return, false, game)
-                task.wait(0.001)  -- Sửa từ 0.000000000000001
+                task.wait(0.000000000000001)
                 game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.Return, false, game)
-                task.wait(0.001)  -- Sửa từ 0.000000000000001
+                task.wait(0.000000000000001)
                 game:GetService("GuiService").SelectedObject = nil
             end
         end)
     end
 until game.Players.LocalPlayer.Team ~= nil
 task.wait(0.5)
-
 local TimeHop = getgenv().SettingFarm["HOP Delay"]["Delay"]
 getgenv().TimeHop = TimeHop
 local TimeHopServer = TimeHop
 
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
+local player = Players.LocalPlayer
 
--- === FIX THÊM ===
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Enemies = workspace:WaitForChild("Enemies")
-local Lighting = game:GetService("Lighting")
-
-L_1_[46] = ReplicatedStorage
-L_1_[25] = game:GetService("ReplicatedStorage")
--- === SỬA RACEMAP - ĐỔI KEY TRÙNG ===
 local raceMap = {
     ["The Unleashed"] = {Race = "Human", Version = 2},
     ["Full Power"] = {Race = "Human", Version = 3},
@@ -191,7 +126,7 @@ local raceMap = {
 
     ["Sacred Warrior"] = {Race = "Angel", Version = 2},
     ["Perfect Being"] = {Race = "Angel", Version = 3},
-    ["Celestial Conqueror"] = {Race = "Angel", Version = 4},  -- Sửa từ "His Majesty"
+    ["His Majesty"] = {Race = "Angel", Version = 4},
 
     ["The Ghoul"] = {Race = "Ghoul", Version = 2},
     ["Hell Hound"] = {Race = "Ghoul", Version = 3},
@@ -217,6 +152,7 @@ local function GetRaceVersion()
     
     local maxVersion = 1
     
+    -- Kiểm tra nếu lấy titles thành công và là bảng
     if success and typeof(titles) == "table" then
         for _, t in pairs(titles) do
             if typeof(t) == "table" and t.Name then
@@ -228,6 +164,7 @@ local function GetRaceVersion()
                 end
             end
         end
+    else
     end
     
     return baseRace, maxVersion
@@ -252,8 +189,10 @@ local function GetInventoryItems()
         end
     end
     
+    -- Sắp xếp theo alphabet
     table.sort(itemsList)
     
+    -- Giới hạn hiển thị (tối đa 15 items để không quá dài)
     local maxItems = 15
     local totalItems = #itemsList
     local displayedItems = {}
@@ -262,10 +201,12 @@ local function GetInventoryItems()
         for i = 1, maxItems do
             table.insert(displayedItems, itemsList[i])
         end
+        displayedItems[maxItems] = displayedItems[maxItems]
     else
         displayedItems = itemsList
     end
     
+    -- Format thành chuỗi
     local formattedText = ""
     if #displayedItems > 0 then
         for i, itemName in ipairs(displayedItems) do
@@ -276,12 +217,13 @@ local function GetInventoryItems()
             end
         end
     else
-        formattedText = "None"
+        formattedText =  "None"
     end
     
     return formattedText, totalItems
 end
 
+-- Hàm lấy fruit và mastery
 local function GetFruitInfo()
     local fruitList = {
         "Rocket-Rocket", "Spin-Spin", "Blade-Blade", "Spring-Spring", "Bomb-Bomb", 
@@ -295,6 +237,7 @@ local function GetFruitInfo()
         "Yeti-Yeti", "Kitsune-Kitsune", "Control-Control", "Dragon-Dragon"
     }
     
+    -- Kiểm tra trong Backpack
     local backpack = player:FindFirstChild("Backpack")
     if backpack then
         for _, fruitName in ipairs(fruitList) do
@@ -302,13 +245,14 @@ local function GetFruitInfo()
             if fruit then
                 local level = fruit:FindFirstChild("Level")
                 if level then
-                    local fruitSimpleName = fruitName:gsub("%-.*", "")
+                    local fruitSimpleName = fruitName:gsub("%-.*", "") -- Lấy phần tên trước dấu -
                     return fruitSimpleName .. " [" .. tostring(level.Value) .. "]"
                 end
             end
         end
     end
     
+    -- Kiểm tra trong Character
     local character = player.Character
     if character then
         for _, fruitName in ipairs(fruitList) do
@@ -316,14 +260,14 @@ local function GetFruitInfo()
             if fruit then
                 local level = fruit:FindFirstChild("Level")
                 if level then
-                    local fruitSimpleName = fruitName:gsub("%-.*", "")
+                    local fruitSimpleName = fruitName:gsub("%-.*", "") -- Lấy phần tên trước dấu -
                     return fruitSimpleName .. " [" .. tostring(level.Value) .. "]"
                 end
             end
         end
     end
     
-    return "None"
+    return  "None"
 end
 
 local function GetOwnedMelee()
@@ -332,7 +276,7 @@ local function GetOwnedMelee()
         {cmd = "BuyBlackLeg", name = "Dark Step"},
         {cmd = "BuyFishmanKarate", name = "Fishman Karate"},
         {cmd = "BuyElectro", name = "Electro"},
-        {name = "Dragon Breath", type = "dragonclaw"},
+        {name = "Dragon Breath", type = "dragonclaw"}, -- Thay đổi ở đây
         {cmd = "BuyDeathStep", name = "Death Step"},
         {cmd = "BuySharkmanKarate", name = "Sharkman Karate"},
         {cmd = "BuyElectricClaw", name = "Electric Claw"},
@@ -346,6 +290,7 @@ local function GetOwnedMelee()
         local hasMelee = false
         
         if melee.type == "dragonclaw" then
+            -- Kiểm tra Dragon Claw cấp 1 và 2
             local success1, result1 = pcall(function()
                 return game.ReplicatedStorage.Remotes.CommF_:InvokeServer("BlackbeardReward", "DragonClaw", "1")
             end)
@@ -359,6 +304,7 @@ local function GetOwnedMelee()
                 hasMelee = true
             end
         else
+            -- Kiểm tra các melee bình thường khác
             local success, result = pcall(function()
                 return game.ReplicatedStorage.Remotes.CommF_:InvokeServer(melee.cmd, true)
             end)
@@ -371,11 +317,12 @@ local function GetOwnedMelee()
         if hasMelee then
             table.insert(meleeList, melee.name)
         end
-        task.wait(0.1)
+        task.wait(0.1) -- Tránh spam server
     end
     
+    -- Format danh sách melee
     if #meleeList == 0 then
-        return "None"
+        return "None```"
     else
         local formattedList = ""
         for i, meleeName in ipairs(meleeList) do
@@ -389,21 +336,23 @@ local function GetOwnedMelee()
     end
 end
 
--- === SỬA SENDWEBHOOK - ĐỊNH NGHĨA NGOÀI IF BLOCK ===
-local SendWebhook
-
 if getgenv().SettingFarm["Webhook"]["Enabled"] then
-    SendWebhook = function(statusfarmwebhook)
+    -- Send Webhook
+    local function SendWebhook(statusfarmwebhook)
         local statusfarming = statusfarmwebhook or "```\nNone\n```"
         if not getgenv().SettingFarm["Webhook"]["Enabled"] then return end
         
+        -- Lấy thông tin Race
         local raceName, raceVersion = GetRaceVersion()
         local raceText = raceName .. " [V" .. raceVersion .. "]"
         
-        local fruitInfo = GetFruitInfo()
+        -- Lấy thông tin Fruit
+        local fruitInfo, currentFruitName = GetFruitInfo()
         
+        -- Lấy danh sách melee đã sở hữu
         local meleeInfo = GetOwnedMelee()
         
+        -- Lấy danh sách fruit collected
         local fruitCollectedText = ""
         if #fruit_collected > 0 then
             for i, fruitName in ipairs(fruit_collected) do
@@ -417,6 +366,7 @@ if getgenv().SettingFarm["Webhook"]["Enabled"] then
             fruitCollectedText = "None"
         end
         
+        -- Lấy danh sách items từ inventory
         local inventoryText = GetInventoryItems()
     
         local pingContent = ""
@@ -433,12 +383,13 @@ if getgenv().SettingFarm["Webhook"]["Enabled"] then
             pingContent = "<@&" .. pingId .. ">"
         end
         
+        -- Tạo dữ liệu cho webhook
         local Data = {
             ["content"] = pingContent,
             ["embeds"] = {{
-                ["title"] = "Haven Hub Notification",
-                ["username"] = "Haven Hub",
-                ["avatar_url"] = "https://cdn.discordapp.com/avatars/1102948425126920242/41700e14db5367da581c7d2d0c2f98d9.png",
+                ["title"] = "Lonely Hub Notification",
+                ["username"] = "Lonely Hub",
+                ["avatar_url"] = "https://i.imgur.com/ezB0Y2J.png",
                 ["color"] = tonumber("0xFF0000"),
                 ["fields"] = {
                     {
@@ -477,6 +428,7 @@ if getgenv().SettingFarm["Webhook"]["Enabled"] then
             }}
         }
         
+        -- Encode dữ liệu
         local success, encoded = pcall(function()
             return HttpService:JSONEncode(Data)
         end)
@@ -485,6 +437,7 @@ if getgenv().SettingFarm["Webhook"]["Enabled"] then
             return
         end
         
+        -- Gửi request
         local Request = http_request or request or HttpPost or syn.request
         if Request then
             local response = Request({
@@ -496,45 +449,279 @@ if getgenv().SettingFarm["Webhook"]["Enabled"] then
         end
     end
 else
-    SendWebhook = function(lslepdlw0eo)
+    local function SendWebhook(lslepdlw0eo)
         print(lslepdlw0eo)
     end
 end
 
--- === SỬA WEBHOOKGROUPS - DÙNG LONELYHUB THAY VÌ HAVEN ===
-local LonelyHub = {
-    ["Mirage Island"] = "https://discord.com/api/webhooks/1416634544450437191/r7F2leSvgIn5KthKucUd57qGlXe22f88ZY7nuCBp2j487cA16YyPKN7163qrqh4dMElk",
-    ["Kitsune Island"] = "https://discord.com/api/webhooks/1416634674624725052/VaV6ShPx98fOT1J7BvMjb6ObfgPmcvMJpLZzVjAFZtFlkpoBTvYwGC3JNvfuJCkO0PNk",
-    ["Prehistoric Island"] = "https://discord.com/api/webhooks/1416634791524171846/ynUFgtU7uW_soj_VjByyMfDdpRHOplEdhDTpvlb_KtvUhTBC8rHKoK-0nrOYHhET-zAV",
-    ["Full Moon"] = "https://discord.com/api/webhooks/1416634928703209602/jcmU7AVTJPU1J4CWut8rjRFUl7KIsqJJOI_hId9zFBqsuA0oPTH9bkrQR467Ed3gtj1E",
-    ["Near Full Moon"] = "https://discord.com/api/webhooks/1416635012073390142/QZCIVE96gIq1mP1UOQyDs5CGm9M193VPucYlRhnRDkWZzzvkYUzAAt_HQ-neR5EPRXty",
-    ["Rip Indra"] = "https://discord.com/api/webhooks/1416635105484607599/oIPwubvIgR5daBmzX6BfI2XrIoVH6e9hJIbYM_oP0NF0F-O7bJTQg835n-LG9yrvM_AR",
-    ["Dough King"] = "https://discord.com/api/webhooks/1416635243053453515/u15ogCib29cV5l92Iq-ZJT4Qj3QY42_t8PbfbHgi1reFmZPAOYymoSlQWi_aIDScLXpC",
-    ["Cake Prince"] = "https://discord.com/api/webhooks/1416635335953223772/quOipsI1BcQSxoGizfRuHyKqBkf_wBgnAUyoYZLQJod_NcqG4DVNIFSyMwkeaqVWYD8C",
-    ["Tyrant of the Skies"] = "https://discord.com/api/webhooks/1416635427187851357/KGVptL-nZafsZ7CV2gJ_14n_0isJeZLwqFL2l3r6vXpBGo5XDA8HoqZ_xIJYRHMuxP6T",
-    ["Darkbeard"] = "https://discord.com/api/webhooks/1416635480874684436/KfYIk-ozZanKv7KTTRXOi21Xp1liXAoAMlyfQ3w8PE6ovXi_WHoovvPIghx6uf9pEd3-",
-    ["Soul Reaper"] = "https://discord.com/api/webhooks/1416640009444003942/ZimVSwRmOJBf119LSo4j7kNTPfkgp4DoHc9_0uWJapGFnmeU8laGZgWlTZhBipUd5GJs",
-    ["Cursed Captain"] = "https://discord.com/api/webhooks/1416640126167158814/SJg8S7zHWQLcJ0y4ExvhM_fZyesrW911bquTpSB026FM0TpGNYLafLYAccIXAFHu_GZV",
-    ["Legendary Sword"] = "https://discord.com/api/webhooks/1416640232333246504/Ft6n9sX1weucNy8pgijC0mt1xkOWKj8AOMJKR7Py1aOEHccOFtjhfXqs5JXFI5c59wq9"
-}
+if getgenv().SettingFarm["White Screen"] then
+    game:GetService("RunService"):Set3dRenderingEnabled(false)
+end
 
-if not getgenv().WebhookURLs then
+if getgenv().SettingFarm["Black Screen"] then
+    pcall(function()
+        if not PlayerGui:FindFirstChild("AFKBlackScreen") then
+            local blackScreen = Instance.new("ScreenGui")
+            blackScreen.Name = "AFKBlackScreen"
+            blackScreen.IgnoreGuiInset = true
+            blackScreen.Parent = CoreGui
+            blackScreen.ResetOnSpawn = false
+
+            local blackFrame = Instance.new("Frame")
+            blackFrame.Size = UDim2.new(1,0,1,0)
+            blackFrame.Position = UDim2.new(0,0,0,0)
+            blackFrame.BackgroundColor3 = Color3.new(0,0,0)
+            blackFrame.BorderSizePixel = 0
+            blackFrame.Parent = blackScreen
+        end
+
+        RunService:Set3dRenderingEnabled(false)
+    end)
+end
+
+if getgenv().SettingFarm["Lock Fps"]["Enabled"] then
+    pcall(function()
+        setfpscap(getgenv().SettingFarm["Lock Fps"]["FPS"])
+    end)
+end
+
+if getgenv().SettingFarm["Auto Chat"]["Enabled"] == true then
+    local TextChatService = game:GetService("TextChatService")
+    task.spawn(function()
+        repeat task.wait() until getgenv().SettingFarm
+        repeat task.wait() until getgenv().SettingFarm["Auto Chat"]
+    
+        if getgenv().AutoChatRunning then return end
+        getgenv().AutoChatRunning = true
+    
+        local index = 1
+    
+        while true do
+            if not getgenv().SettingFarm["Auto Chat"]["Enabled"] then
+                task.wait(1)
+                continue
+            end
+    
+            local text = getgenv().SettingFarm["Auto Chat"]["Text"]
+            pcall(function()
+                if typeof(text) == "table" then
+                    if #text > 0 then
+                        TextChatService.TextChannels.RBXGeneral:SendAsync(text[index])
+                        index += 1
+                        if index > #text then
+                            index = 1 -- quay vòng
+                        end
+                    end
+                elseif typeof(text) == "string" then
+                    TextChatService.TextChannels.RBXGeneral:SendAsync(text)
+                end
+            end)
+    
+            task.wait(150)
+        end
+    end)
+end
+
+local SUBMERGED_POS = Vector3.new(11520.8, 0, 9829.5)
+
+local function IsInSubmerged()
+    local hrp = L_1_[35].Character and L_1_[35].Character:FindFirstChild("HumanoidRootPart")
+    if not hrp then return false end
+    local p = Vector3.new(hrp.Position.X, 0, hrp.Position.Z)
+    return (p - SUBMERGED_POS).Magnitude < 2000
+end
+
+local L_1_ = {}
+L_1_[3] = table["concat"]
+if not game:IsLoaded() then
+	repeat
+		game["Loaded"]:Wait()
+	until game:IsLoaded()
+end;
+do
+    local newConfig = getgenv().SettingFarm
+    local oldConfig = {
+        ["Quest"] = {
+            ["Evo Race V1"] = newConfig["Quest"]["Evo Race V1"],
+            ["Evo Race V2"] = newConfig["Quest"]["Evo Race V2"],
+            ["RGB Haki"] = newConfig["Quest"]["RGB Haki"],
+            ["Pull Lerver"] = newConfig["Quest"]["Pull Lerver"]
+        },
+        ["Sword"] = {},
+        ["Gun"] = {},
+        ["FPS Booster"] = newConfig["FPS Booster"]
+    }
+    
+    if newConfig["Sword"]["Dual-Headed Blade"] then table.insert(oldConfig["Sword"], "Dual-Headed Blade") end
+    if newConfig["Sword"]["Smoke Admiral"] then table.insert(oldConfig["Sword"], "Smoke Admiral") end
+    if newConfig["Sword"]["Wardens Sword"] then table.insert(oldConfig["Sword"], "Wardens Sword") end
+    if newConfig["Sword"]["Cutlass"] then table.insert(oldConfig["Sword"], "Cutlass") end
+    if newConfig["Sword"]["Katana"] then table.insert(oldConfig["Sword"], "Katana") end
+    if newConfig["Sword"]["Dual Katana"] then table.insert(oldConfig["Sword"], "Dual Katana") end
+    if newConfig["Sword"]["Triple Katana"] then table.insert(oldConfig["Sword"], "Triple Katana") end
+    if newConfig["Sword"]["Iron Mace"] then table.insert(oldConfig["Sword"], "Iron Mace") end
+    if newConfig["Sword"]["Saber"] then table.insert(oldConfig["Sword"], "Saber") end
+    if newConfig["Sword"]["Pole (1st Form)"] then table.insert(oldConfig["Sword"], "Pole (1st Form)") end
+    if newConfig["Sword"]["Gravity Blade"] then table.insert(oldConfig["Sword"], "Gravity Blade") end
+    if newConfig["Sword"]["Longsword"] then table.insert(oldConfig["Sword"], "Longsword") end
+    if newConfig["Sword"]["Rengoku"] then table.insert(oldConfig["Sword"], "Rengoku") end
+    if newConfig["Sword"]["Midnight Blade"] then table.insert(oldConfig["Sword"], "Midnight Blade") end
+    if newConfig["Sword"]["Soul Cane"] then table.insert(oldConfig["Sword"], "Soul Cane") end
+    if newConfig["Sword"]["Bisento"] then table.insert(oldConfig["Sword"], "Bisento") end
+    if newConfig["Sword"]["Yama"] then table.insert(oldConfig["Sword"], "Yama") end
+    if newConfig["Sword"]["Tushita"] then table.insert(oldConfig["Sword"], "Tushita") end
+    if newConfig["Sword"]["Cursed Dual Katana"] then table.insert(oldConfig["Sword"], "Cursed Dual Katana") end
+    
+    if newConfig["Gun"]["Skull Guitar"] then table.insert(oldConfig["Gun"], "Soul Guitar") end
+    if newConfig["Gun"]["Kabucha"] then table.insert(oldConfig["Gun"], "Kabucha") end
+    if newConfig["Gun"]["Venom Bow"] then table.insert(oldConfig["Gun"], "Venom Bow") end
+    if newConfig["Gun"]["Musket"] then table.insert(oldConfig["Gun"], "Musket") end
+    if newConfig["Gun"]["Flintlock"] then table.insert(oldConfig["Gun"], "Flintlock") end
+    if newConfig["Gun"]["Refined Slingshot"] then table.insert(oldConfig["Gun"], "Refined Slingshot") end
+    if newConfig["Gun"]["Magma Blaster"] then table.insert(oldConfig["Gun"], "Magma Blaster") end
+    if newConfig["Gun"]["Dual Flintlock"] then table.insert(oldConfig["Gun"], "Dual Flintlock") end
+    if newConfig["Gun"]["Cannon"] then table.insert(oldConfig["Gun"], "Cannon") end
+    if newConfig["Gun"]["Bizarre Revolver"] then table.insert(oldConfig["Gun"], "Bizarre Revolver") end
+    if newConfig["Gun"]["Bazooka"] then table.insert(oldConfig["Gun"], "Bazooka") end
+    
+    getgenv().Configs = oldConfig
+end
+
+local targetPlayers = {
+    ["red_game43"] = true,
+    ["rip_indra"] = true,
+    ["Axiore"] = true,
+    ["Polkster"] = true,
+    ["wenlocktoad"] = true,
+    ["Daigrock"] = true,
+    ["toilamvidamme"] = true,
+    ["oofficialnoobie"] = true,
+    ["Uzoth"] = true,
+    ["Azarth"] = true,
+    ["arlthmetic"] = true,
+    ["Death_King"] = true,
+    ["Lunoven"] = true,
+    ["TheGreateAced"] = true,
+    ["rip_fud"] = true,
+    ["drip_mama"] = true,
+    ["layandikit12"] = true,
+    ["Hingoi"] = true
+}
+spawn(function()
+    while true do
+        task.wait(1)
+        for _, v in pairs(game.Players:GetPlayers()) do
+            if targetPlayers[v.Name] then
+                Hop()
+                break
+            end
+        end
+    end
+end)
+
+local function Hop()
+        require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
+        task.wait(TimeHopServer)
+        require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
+            local AllIDs = {}
+        local foundAnything = ""
+        local actualHour = os.date("!*t").hour
+        
+        function TPReturner()
+            local Site
+            if foundAnything == "" then
+                Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. game.PlaceId .. '/servers/Public?sortOrder=Asc&limit=100'))
+            else
+                Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. game.PlaceId .. '/servers/Public?sortOrder=Asc&limit=100&cursor=' .. foundAnything))
+            end
+            
+            if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
+                foundAnything = Site.nextPageCursor
+            end
+            
+            local num = 0
+            for i,v in pairs(Site.data) do
+                local Possible = true
+                local ID = tostring(v.id)
+                
+                if tonumber(v.maxPlayers) > tonumber(v.playing) then
+                    for _,Existing in pairs(AllIDs) do
+                        if num ~= 0 then
+                            if ID == tostring(Existing) then
+                                Possible = false
+                            end
+                        else
+                            if tonumber(actualHour) ~= tonumber(Existing) then
+                                pcall(function()
+                                    AllIDs = {}
+                                    table.insert(AllIDs, actualHour)
+                                end)
+                            end
+                        end
+                        num = num + 1
+                    end
+                    
+                    if Possible == true then
+                        table.insert(AllIDs, ID)
+                        
+                        pcall(function()
+                            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, ID, game.Players.LocalPlayer)
+                        end)
+                        wait(1)
+                        break
+                    end
+                end
+            end
+        end
+        
+        while true do
+            pcall(function()
+                TPReturner()
+                if foundAnything ~= "" then
+                    TPReturner()
+                end
+            end)
+            wait(2)
+        end
+end
+task.spawn(function()
+    
+    
+    local Enemies = workspace:WaitForChild("Enemies")
+    local Lighting = game:GetService("Lighting")
+    
+
+    local SEA1_PLACE_ID = 85211729168715
+    local SEA2_PLACE_ID = 79091703265657
+    local SEA3_PLACE_ID = 100117331123089
+    local jobId = tostring(game.JobId)
+    local joinScript = string.format(
+        'game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, "%s", game.Players.LocalPlayer)',
+        jobId
+    )
+
+--// Webhook Configuration
+    local LonelyHub = {
+        ["Mirage Island"] = "https://discord.com/api/webhooks/1416634544450437191/r7F2leSvgIn5KthKucUd57qGlXe22f88ZY7nuCBp2j487cA16YyPKN7163qrqh4dMElk",
+        ["Kitsune Island"] = "https://discord.com/api/webhooks/1416634674624725052/VaV6ShPx98fOT1J7BvMjb6ObfgPmcvMJpLZzVjAFZtFlkpoBTvYwGC3JNvfuJCkO0PNk",
+        ["Prehistoric Island"] = "https://discord.com/api/webhooks/1416634791524171846/ynUFgtU7uW_soj_VjByyMfDdpRHOplEdhDTpvlb_KtvUhTBC8rHKoK-0nrOYHhET-zAV",
+        ["Full Moon"] = "https://discord.com/api/webhooks/1416634928703209602/jcmU7AVTJPU1J4CWut8rjRFUl7KIsqJJOI_hId9zFBqsuA0oPTH9bkrQR467Ed3gtj1E",
+        ["Near Full Moon"] = "https://discord.com/api/webhooks/1416635012073390142/QZCIVE96gIq1mP1UOQyDs5CGm9M193VPucYlRhnRDkWZzzvkYUzAAt_HQ-neR5EPRXty",
+        ["Rip Indra"] = "https://discord.com/api/webhooks/1416635105484607599/oIPwubvIgR5daBmzX6BfI2XrIoVH6e9hJIbYM_oP0NF0F-O7bJTQg835n-LG9yrvM_AR",
+        ["Dough King"] = "https://discord.com/api/webhooks/1416635243053453515/u15ogCib29cV5l92Iq-ZJT4Qj3QY42_t8PbfbHgi1reFmZPAOYymoSlQWi_aIDScLXpC",
+        ["Cake Prince"] = "https://discord.com/api/webhooks/1416635335953223772/quOipsI1BcQSxoGizfRuHyKqBkf_wBgnAUyoYZLQJod_NcqG4DVNIFSyMwkeaqVWYD8C",
+        ["Tyrant of the Skies"] = "https://discord.com/api/webhooks/1416635427187851357/KGVptL-nZafsZ7CV2gJ_14n_0isJeZLwqFL2l3r6vXpBGo5XDA8HoqZ_xIJYRHMuxP6T",
+        ["Darkbeard"] = "https://discord.com/api/webhooks/1416635480874684436/KfYIk-ozZanKv7KTTRXOi21Xp1liXAoAMlyfQ3w8PE6ovXi_WHoovvPIghx6uf9pEd3-",
+        ["Soul Reaper"] = "https://discord.com/api/webhooks/1416640009444003942/ZimVSwRmOJBf119LSo4j7kNTPfkgp4DoHc9_0uWJapGFnmeU8laGZgWlTZhBipUd5GJs",
+        ["Cursed Captain"] = "https://discord.com/api/webhooks/1416640126167158814/SJg8S7zHWQLcJ0y4ExvhM_fZyesrW911bquTpSB026FM0TpGNYLafLYAccIXAFHu_GZV",
+        ["Legendary Sword"] = "https://discord.com/api/webhooks/1416640232333246504/Ft6n9sX1weucNy8pgijC0mt1xkOWKj8AOMJKR7Py1aOEHccOFtjhfXqs5JXFI5c59wq9"
+    }
+
+    if not getgenv().WebhookURLs then
     getgenv().WebhookURLs = {
         ["LonelyHub"] = true,
     }
-end
--- === KHAI BÁO BIẾN CHO WEBHOOK BOSS ===
-local SEA1_PLACE_ID = 85211729168715
-local SEA2_PLACE_ID = 79091703265657
-local SEA3_PLACE_ID = 100117331123089
-
-local jobId = game.JobId
-local joinScript = [[
-game:GetService("TeleportService"):TeleportToPlaceInstance(]] .. game.PlaceId .. [[, "]] .. game.JobId .. [[", game.Players.LocalPlayer)
-]]
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Enemies = workspace:WaitForChild("Enemies")
-local Lighting = game:GetService("Lighting")
+    end
 
     local WebhookGroups = {
         ["LonelyHub"] = LonelyHub,
@@ -580,10 +767,10 @@ local Lighting = game:GetService("Lighting")
 
     local playerCount = #Players:GetPlayers()
     local data = {
-        username = "Haven Hub",
-        avatar_url = "https://media.discordapp.net/attachments/1517708454523830392/1521855152867377322/87c67f8e-b498-43c4-8adf-b45429df77c3.png?ex=6a46598f&is=6a45080f&hm=1ca6b04ca79c6199810c75c8535d2baf304ada0a9f2e2dbbb0dbc7489ec1058e&=&format=webp&quality=lossless&width=656&height=656",
+        username = "Lonely Hub",
+        avatar_url = "https://i.imgur.com/TWW22k4.jpeg",
         embeds = {{
-            title = "<:lonelyhub:1416628422385336361> Nô Nô Hub Notification <:lonelyhub:1416628422385336361>",
+            title = "<:lonelyhub:1416628422385336361> Lonely Hub Notification <:lonelyhub:1416628422385336361>",
             color = tonumber(0xFFFFFF),
             fields = {
                 {
@@ -603,7 +790,7 @@ local Lighting = game:GetService("Lighting")
                 }
             },
             footer = {
-                text = " Make By YTB Nô Nô Cloud " .. os.date("%d/%m/%Y - %H:%M:%S")
+                text = "Make by LongHip12 • " .. os.date("%d/%m/%Y - %H:%M:%S")
             }
         }}
     }
@@ -1111,21 +1298,9 @@ task["spawn"](function()
 	end
 end)
 
--- === TEST UI ĐƠN GIẢN ===
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "HavenHubTest"
-ScreenGui.Parent = game:GetService("CoreGui")
-
-local TextLabel = Instance.new("TextLabel")
-TextLabel.Size = UDim2.new(0, 300, 0, 100)
-TextLabel.Position = UDim2.new(0.5, -150, 0.5, -50)
-TextLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-TextLabel.TextColor3 = Color3.fromRGB(0, 255, 255)
-TextLabel.Text = "CON
-TextLabel.TextScaled = true
-TextLabel.Parent = ScreenGui
-
-print("UI Test Created!")
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
+local StatusGUIGay = CoreGui:FindFirstChild("Status") and CoreGui:FindFirstChild("Lonely Hub Btn") and CoreGui:FindFirstChild("CoinCard")
 if StatusGUIGay then
     StatusGUIGay:Destroy()
 end
@@ -1152,7 +1327,7 @@ end
 local Lighting = game:GetService("Lighting")
 
 local blur = Instance.new("BlurEffect")
-blur.Name = "Haven Hub Blur"
+blur.Name = "Lonely Hub Blur"
 blur.Parent = Lighting
 if getgenv().SettingFarm["Hide UI"] then
     blur.Size = 0
@@ -1185,9 +1360,6 @@ local UIGradientStats = Instance.new("UIGradient")
 local UnderItems = Instance.new("TextLabel")
 local UIGradientItems = Instance.new("UIGradient")
 local DropShadow = Instance.new("ImageLabel")
--- === NEON THEME ===
-local NeonColor = Color3.fromRGB(0, 255, 255)      -- Neon Cyan
-local NeonDark = Color3.fromRGB(0, 70, 100)
 
 CoinCard.Name = "CoinCard"
 CoinCard.Parent = game:GetService("CoreGui")
@@ -1209,8 +1381,8 @@ DropShadowHolder.ZIndex = 1
 DropShadowHolder.Selectable = false
 
 Main.AnchorPoint = Vector2.new(0.5, 0.5)
-Main.BackgroundColor3 = Color3.fromRGB(10, 10, 25)
-Main.BackgroundTransparency = 0.35
+Main.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Main.BackgroundTransparency = 0.5
 Main.Name = "Main"
 Main.Parent = DropShadowHolder
 Main.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -1220,18 +1392,9 @@ Main.Selectable = false
 UICornerMain.CornerRadius = UDim.new(0, 5)
 UICornerMain.Parent = Main
 
-UIStrokeMain.Color = NeonColor
-UIStrokeMain.Thickness = 3.5
-UIStrokeMain.Transparency = 0.1
+UIStrokeMain.Color = Color3.fromRGB(255, 80, 80)
+UIStrokeMain.Thickness = 2.5
 UIStrokeMain.Parent = Main
-
--- Neon Glow
-local NeonGlow = Instance.new("UIStroke")
-NeonGlow.Name = "NeonGlow"
-NeonGlow.Color = NeonColor
-NeonGlow.Thickness = 8
-NeonGlow.Transparency = 0.65
-NeonGlow.Parent = Main
 
 DividerTop.BorderColor3 = Color3.fromRGB(27, 42, 53)
 DividerTop.Name = "Divider"
@@ -1393,15 +1556,12 @@ TopTitle.Position = UDim2.new(0.5, 0, 0.05000000074505806, 0)
 TopTitle.Size = UDim2.new(0, 0, 0, 18)
 TopTitle.Selectable = false
 TopTitle.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
-TopTitle.Text = " Stats Checker"
+TopTitle.Text = "Lonely Stats Checker"
 TopTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 TopTitle.TextSize = 16
 TopTitle.TextYAlignment = Enum.TextYAlignment.Bottom
 
-UIGradientTitle.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0, NeonColor),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 220, 255))
-}
+UIGradientTitle.Color = ColorSequence.new{ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 80, 80)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 80, 80)), }
 UIGradientTitle.Parent = TopTitle
 
 UnderStats.BackgroundTransparency = 0.9990000128746033
@@ -1416,10 +1576,7 @@ UnderStats.TextColor3 = Color3.fromRGB(255, 255, 255)
 UnderStats.TextSize = 16
 UnderStats.TextYAlignment = Enum.TextYAlignment.Bottom
 
-UIGradientTitle.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0, NeonColor),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 220, 255))
-}
+UIGradientStats.Color = ColorSequence.new{ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 80, 80)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 80, 80)), }
 UIGradientStats.Parent = UnderStats
 
 UnderItems.BackgroundTransparency = 0.9990000128746033
@@ -1434,10 +1591,7 @@ UnderItems.TextColor3 = Color3.fromRGB(255, 255, 255)
 UnderItems.TextSize = 16
 UnderItems.TextYAlignment = Enum.TextYAlignment.Bottom
 
-UIGradientTitle.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0, NeonColor),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 220, 255))
-}
+UIGradientItems.Color = ColorSequence.new{ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 80, 80)), ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 80, 80)), }
 UIGradientItems.Parent = UnderItems
 
 DropShadow.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -1449,7 +1603,7 @@ DropShadow.Parent = DropShadowHolder
 DropShadow.Position = UDim2.new(0.5, 0, 0.5, 0)
 DropShadow.Size = UDim2.new(1, 47, 1, 47)
 DropShadow.ZIndex = 0
-DropShadow.Image = "rbxassetid://75537056891455"
+DropShadow.Image = "rbxassetid://6015897843"
 DropShadow.ImageTransparency = 0.25
 DropShadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
 
@@ -1485,7 +1639,7 @@ DropShadow2.BorderSizePixel = 0
 DropShadow2.Position = UDim2.new(0.5, 0,0.349999994, 0)
 DropShadow2.Size = UDim2.new(1, 47,1, 47)
 DropShadow2.ZIndex = 0
-DropShadow2.Image = "rbxassetid://75537056891455"
+DropShadow2.Image = "rbxassetid://6015897843"
 DropShadow2.ImageColor3 = Color3.fromRGB(0,0,0)
 DropShadow2.ImageTransparency = 0.5
 DropShadow2.ScaleType = Enum.ScaleType.Slice
@@ -1504,15 +1658,8 @@ Main2.Size = UDim2.new(1, -50,1, -55)
 
 local UIStrokeMain2 = Instance.new("UIStroke")
 UIStrokeMain2.Parent = Main2
-UIStrokeMain2.Color = NeonColor
-UIStrokeMain2.Thickness = 3
-
--- Extra Glow
-local StatusGlow = Instance.new("UIStroke")
-StatusGlow.Color = NeonColor
-StatusGlow.Thickness = 6
-StatusGlow.Transparency = 0.7
-StatusGlow.Parent = Main2
+UIStrokeMain2.Color = Color3.fromRGB(233,80,80)
+UIStrokeMain2.Thickness = 2.5
 
 local Top2 = Instance.new("TextLabel")
 Top2.Name = "Top2"
@@ -1524,7 +1671,7 @@ Top2.Position = UDim2.new(0.5, 0,0, 10)
 Top2.Size = UDim2.new(0, 300,0, 18)
 Top2.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
 Top2.Text = "Status: N/A"
-Top2.TextColor3 = NeonColor
+Top2.TextColor3 = Color3.fromRGB(233,80,80)
 Top2.TextSize = 16
 Top2.TextWrapped = true
 
@@ -1540,7 +1687,7 @@ UnderStatus.Position = UDim2.new(0.5, 0,0, 30)
 UnderStatus.Size = UDim2.new(0, 450,0, 18)
 UnderStatus.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
 UnderStatus.Text = "Status Farm: N/A"
-UnderStatus.TextColor3 = NeonColor
+UnderStatus.TextColor3 = Color3.fromRGB(233,80,80)
 UnderStatus.TextSize = 16
 
 local DiscordLabel = Instance.new("TextLabel")
@@ -1552,14 +1699,10 @@ DiscordLabel.BorderSizePixel = 0
 DiscordLabel.Position = UDim2.new(0.5, 0,-0.0250000004, 0)
 DiscordLabel.Size = UDim2.new(0, 210,0, 50)
 DiscordLabel.FontFace = Font.new("rbxasset://fonts/families/GothamSSm.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
-DiscordLabel.Text = "https://discord.gg/gSVNchYgeM"
-DiscordLabel.TextColor3 = Color3.fromRGB(0, 191, 255)  
+DiscordLabel.Text = "discord.gg/2anc7nHw6b"
+DiscordLabel.TextColor3 = Color3.fromRGB(233,80,80)
 DiscordLabel.TextSize = 16
 
-local UIStrokeDiscord = Instance.new("UIStroke")
-UIStrokeDiscord.Parent = DiscordLabel
-UIStrokeDiscord.Thickness = 1
-UIStrokeDiscord.Color = Color3.fromRGB(0, 191, 255)  -- Stroke đồng bộ
 local UIStrokeDiscord = Instance.new("UIStroke")
 UIStrokeDiscord.Parent = DiscordLabel
 UIStrokeDiscord.Thickness = 1
@@ -1576,7 +1719,7 @@ local UICornerBtn = Instance.new("UICorner")
 local ImageLabel = Instance.new("ImageLabel")
 local TextButton = Instance.new("TextButton")
 
-LonelyHubBtn.Name = "Haven hub"  
+LonelyHubBtn.Name = "Lonely Hub Btn"  
 LonelyHubBtn.Parent = game:GetService("CoreGui")
 LonelyHubBtn.ZIndexBehavior = Enum.ZIndexBehavior.Sibling  
 LonelyHubBtn.DisplayOrder = 10
@@ -1602,7 +1745,7 @@ ImageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
 ImageLabel.BackgroundTransparency = 1.0  
 ImageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)  
 ImageLabel.Size = UDim2.new(0, 40, 0, 40)  
-ImageLabel.Image = "rbxassetid://75537056891455"  
+ImageLabel.Image = "rbxassetid://112485471724320"  
 
 TextButton.Parent = dutdit  
 TextButton.BackgroundTransparency = 1.0  
@@ -1790,7 +1933,7 @@ local function SetStatus(text)
     Top2.Text = "Status: ".. text 
 end
 
-SetStatus("Haven Hub Is Running")
+SetStatus("Lonely Hub Is Running")
 if L_1_[30] == 85211729168715 then
 	Old_World = true
 elseif L_1_[30] == 79091703265657 then
@@ -1800,658 +1943,294 @@ elseif L_1_[30] == 100117331123089 then
 end
 L_1_[22] = (L_1_[5]:WaitForChild("Data")):WaitForChild("Level")
 function CheckLevel2()
+	local L_28_ = {}
+	L_28_[2] = (game:GetService("Players"))["LocalPlayer"]["Data"]["Level"]["Value"]
 	if Old_World then
-		if MyLevel >= 1 and MyLevel <= 9 then
+		if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 1 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 9 or SelectMonster == "" then
 			Ms = "Bandit"
 			NameQuest = "BanditQuest1"
 			QuestLv = 1
 			NameMon = "Bandit"
-			CFrameQ = CFrame.new(1059.37195, 15.4495068, 1550.4231, 0.939700544, 0, -0.341998369, 0, 1, 0, 0.341998369, 0, 0.939700544)
-			CFrameMon = CFrame.new(1353.44885, 3.40935516, 1376.92029, 0.776053488, -6.97791975e-08, 0.630666852, 6.99138596e-08, 1, 2.4612488e-08, -0.630666852, 2.49917598e-08, 0.776053488)
-		elseif MyLevel >= 10 and MyLevel <= 14 then
-			Ms = "Monkey"
-			NameQuest = "JungleQuest"
-			QuestLv = 1
-			NameMon = "Monkey"
-			CFrameQ = CFrame.new(-1598.08911, 35.5501175, 153.377838, 0, 0, 1, 0, 1, 0, -1, 0, 0)
-			CFrameMon = CFrame.new(-1448.51806640625, 67.85301208496094, 11.46579647064209)
-		elseif MyLevel >= 15 and MyLevel <= 29 then
-			Ms = "Gorilla"
-			NameQuest = "JungleQuest"
-			QuestLv = 2
-			NameMon = "Gorilla"
-			CFrameQ = CFrame.new(-1598.08911, 35.5501175, 153.377838, 0, 0, 1, 0, 1, 0, -1, 0, 0)
-			CFrameMon = CFrame.new(-1129.8836669921875, 40.46354675292969, -525.4237060546875)
-		elseif MyLevel >= 30 and MyLevel <= 39 then
-			Ms = "Pirate"
-			NameQuest = "BuggyQuest1"
-			QuestLv = 1
-			NameMon = "Pirate"
-			CFrameQ = CFrame.new(-1141.07483, 4.10001802, 3831.5498, 0.965929627, 0, -0.258804798, 0, 1, 0, 0.258804798, 0, 0.965929627)
-			CFrameMon = CFrame.new(-1103.513427734375, 13.752052307128906, 3896.091064453125)
-		elseif MyLevel >= 40 and MyLevel <= 59 then
-			Ms = "Brute"
-			NameQuest = "BuggyQuest1"
-			QuestLv = 2
-			NameMon = "Brute"
-			CFrameQ = CFrame.new(-1141.07483, 4.10001802, 3831.5498, 0.965929627, 0, -0.258804798, 0, 1, 0, 0.258804798, 0, 0.965929627)
-			CFrameMon = CFrame.new(-1140.083740234375, 14.809885025024414, 4322.92138671875)
-		elseif MyLevel >= 60 and MyLevel <= 74 then
-			Ms = "Desert Bandit"
-			NameQuest = "DesertQuest"
-			QuestLv = 1
-			NameMon = "Desert Bandit"
-			CFrameQ = CFrame.new(894.488647, 5.14000702, 4392.43359, 0.819155693, 0, -0.573571265, 0, 1, 0, 0.573571265, 0, 0.819155693)
-			CFrameMon = CFrame.new(932.788818, 6.8503746, 4488.24609, -0.998625934, 3.08948351e-08, 0.0524050146, 2.79967303e-08, 1, -5.60361286e-08, -0.0524050146, -5.44919629e-08, -0.998625934)
-		elseif MyLevel >= 75 and MyLevel <= 89 then
-			Ms = "Desert Officer"
-			NameQuest = "DesertQuest"
-			QuestLv = 2
-			NameMon = "Desert Officer"
-			CFrameQ = CFrame.new(894.488647, 5.14000702, 4392.43359, 0.819155693, 0, -0.573571265, 0, 1, 0, 0.573571265, 0, 0.819155693)
-			CFrameMon = CFrame.new(1617.07886, 1.5542295, 4295.54932, -0.997540116, -2.26287735e-08, -0.070099175, -1.69377223e-08, 1, -8.17798806e-08, 0.070099175, -8.03913949e-08, -0.997540116)
-		elseif MyLevel >= 90 and MyLevel <= 99 then
-			Ms = "Snow Bandit"
-			NameQuest = "SnowQuest"
-			QuestLv = 1
-			NameMon = "Snow Bandit"
-			CFrameQ = CFrame.new(1389.74451, 88.1519318, -1298.90796, -0.342042685, 0, 0.939684391, 0, 1, 0, -0.939684391, 0, -0.342042685)
-			CFrameMon = CFrame.new(1354.347900390625, 87.27277374267578, -1393.946533203125)
-		elseif MyLevel >= 100 and MyLevel <= 119 then
-			Ms = "Snowman"
-			NameQuest = "SnowQuest"
-			QuestLv = 2
-			NameMon = "Snowman"
-			CFrameQ = CFrame.new(1389.74451, 88.1519318, -1298.90796, -0.342042685, 0, 0.939684391, 0, 1, 0, -0.939684391, 0, -0.342042685)
-			CFrameMon = CFrame.new(1201.6412353515625, 144.57958984375, -1550.0670166015625)
-		elseif MyLevel >= 120 and MyLevel <= 149 then
-			Ms = "Chief Petty Officer"
-			NameQuest = "MarineQuest2"
-			QuestLv = 1
-			NameMon = "Chief Petty Officer"
-			CFrameQ = CFrame.new(-5039.58643, 27.3500385, 4324.68018, 0, 0, -1, 0, 1, 0, 1, 0, 0)
-			CFrameMon = CFrame.new(-4881.23095703125, 22.65204429626465, 4273.75244140625)
-		elseif MyLevel >= 150 and MyLevel <= 174 then
-			Ms = "Sky Bandit"
-			NameQuest = "SkyQuest"
-			QuestLv = 1
-			NameMon = "Sky Bandit"
-			CFrameQ = CFrame.new(-4839.53027, 716.368591, -2619.44165, 0.866007268, 0, 0.500031412, 0, 1, 0, -0.500031412, 0, 0.866007268)
-			CFrameMon = CFrame.new(-4953.20703125, 295.74420166015625, -2899.22900390625)
-		elseif MyLevel >= 175 and MyLevel <= 189 then
-			Ms = "Dark Master"
-			NameQuest = "SkyQuest"
-			QuestLv = 2
-			NameMon = "Dark Master"
-			CFrameQ = CFrame.new(-4839.53027, 716.368591, -2619.44165, 0.866007268, 0, 0.500031412, 0, 1, 0, -0.500031412, 0, 0.866007268)
-			CFrameMon = CFrame.new(-5259.8447265625, 391.3976745605469, -2229.035400390625)
-		elseif MyLevel >= 190 and MyLevel <= 209 then
-			Ms = "Prisoner"
-			NameQuest = "PrisonerQuest"
-			QuestLv = 1
-			NameMon = "Prisoner"
-			CFrameQ = CFrame.new(5308.93115, 1.65517521, 475.120514, -0.0894274712, -5.00292918e-09, -0.995993316, 1.60817859e-09, 1, -5.16744869e-09, 0.995993316, -2.06384709e-09, -0.0894274712)
-			CFrameMon = CFrame.new(5098.9736328125, -0.3204058110714, 474.23733520508)
-		elseif MyLevel >= 210 and MyLevel <= 249 then
-			Ms = "Dangerous Prisoner"
-			NameQuest = "PrisonerQuest"
-			QuestLv = 2
-			NameMon = "Dangerous Prisoner"
-			CFrameQ = CFrame.new(5308.93115, 1.65517521, 475.120514, -0.0894274712, -5.00292918e-09, -0.995993316, 1.60817859e-09, 1, -5.16744869e-09, 0.995993316, -2.06384709e-09, -0.0894274712)
-			CFrameMon = CFrame.new(5654.5634765625, 15.633401870728, 866.29919433594)
-		elseif MyLevel >= 250 and MyLevel <= 274 then
-			Ms = "Toga Warrior"
-			NameQuest = "ColosseumQuest"
-			QuestLv = 1
-			NameMon = "Toga Warrior"
-			CFrameQ = CFrame.new(-1580.04663, 6.35000277, -2986.47534, -0.515037298, 0, -0.857167721, 0, 1, 0, 0.857167721, 0, -0.515037298)
-			CFrameMon = CFrame.new(-1820.21484375, 51.683856964111, -2740.6650390625)
-		elseif MyLevel >= 275 and MyLevel <= 299 then
-			Ms = "Gladiator"
-			NameQuest = "ColosseumQuest"
-			QuestLv = 2
-			NameMon = "Gladiator"
-			CFrameQ = CFrame.new(-1580.04663, 6.35000277, -2986.47534, -0.515037298, 0, -0.857167721, 0, 1, 0, 0.857167721, 0, -0.515037298)
-			CFrameMon = CFrame.new(-1292.838134765625, 56.380882263183594, -3339.031494140625)
-		elseif MyLevel >= 300 and MyLevel <= 324 then
-			Ms = "Military Soldier"
-			NameQuest = "MagmaQuest"
-			QuestLv = 1
-			NameMon = "Military Soldier"
-			CFrameQ = CFrame.new(-5313.37012, 10.9500084, 8515.29395, -0.499959469, 0, 0.866048813, 0, 1, 0, -0.866048813, 0, -0.499959469)
-			CFrameMon = CFrame.new(-5411.16455078125, 11.081554412841797, 8454.29296875)
-		elseif MyLevel >= 325 and MyLevel <= 374 then
-			Ms = "Military Spy"
-			NameQuest = "MagmaQuest"
-			QuestLv = 2
-			NameMon = "Military Spy"
-			CFrameQ = CFrame.new(-5313.37012, 10.9500084, 8515.29395, -0.499959469, 0, 0.866048813, 0, 1, 0, -0.866048813, 0, -0.499959469)
-			CFrameMon = CFrame.new(-5802.8681640625, 86.26241302490234, 8828.859375)
-		elseif MyLevel >= 375 and MyLevel <= 399 then
-			Ms = "Fishman Warrior"
-			NameQuest = "FishmanQuest"
-			QuestLv = 1
-			NameMon = "Fishman Warrior"
-			CFrameQ = CFrame.new(61122.65234375, 18.4974422454834, 1569.3997802734375)
-			CFrameMon = CFrame.new(60878.30078125, 18.482830047607422, 1543.7574462890625)
-		elseif MyLevel >= 400 and MyLevel <= 449 then
-			Ms = "Fishman Commando"
-			NameQuest = "FishmanQuest"
-			QuestLv = 2
-			NameMon = "Fishman Commando"
-			CFrameQ = CFrame.new(61122.65234375, 18.4974422454834, 1569.3997802734375)
-			CFrameMon = CFrame.new(61922.6328125, 18.482830047607422, 1493.934326171875)
-		elseif MyLevel >= 450 and MyLevel <= 474 then
-			Ms = "God's Guard"
-			NameQuest = "SkyExp1Quest"
-			QuestLv = 1
-			NameMon = "God's Guard"
-			CFrameQ = CFrame.new(-4721.88867, 843.874695, -1949.96643, 0.996191859, 0, -0.0871884301, 0, 1, 0, 0.0871884301, 0, 0.996191859)
-			CFrameMon = CFrame.new(-4710.04296875, 845.2769775390625, -1927.3079833984375)
-		elseif MyLevel >= 475 and MyLevel <= 524 then
+			CFrameQ = CFrame["new"](1059.37195, 15.4495068, 1550.4231, .939700544, 0, -0.341998369, 0, 1, 0, .341998369, 0, .939700544)
+			CFrameMon = CFrame["new"](1353.44885, 3.40935516, 1376.92029, .776053488, -6.97791975e-08, .630666852, 6.99138596e-08, 1, 2.4612488e-08, -0.630666852, 2.49917598e-08, .776053488)
+			Next_Level_X = 10
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 10 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 100 then
 			Ms = "Shanda"
 			NameQuest = "SkyExp1Quest"
 			QuestLv = 2
 			NameMon = "Shanda"
-			CFrameQ = CFrame.new(-7859.09814, 5544.19043, -381.476196, -0.422592998, 0, 0.906319618, 0, 1, 0, -0.906319618, 0, -0.422592998)
-			CFrameMon = CFrame.new(-7678.48974609375, 5566.40380859375, -497.2156066894531)
-		elseif MyLevel >= 525 and MyLevel <= 549 then
+			CFrameQ = CFrame["new"](-7859.09814, 5544.19043, -381.476196)
+			CFrameMon = CFrame["new"](-7904.57373, 5584.37646, -459.62973)
+			Next_Level_X = 75
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 60 and game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 74 or SelectMonster == "Desert Bandit" then
+			Ms = "Desert Bandit"
+			NameQuest = "DesertQuest"
+			QuestLv = 1
+			NameMon = "Desert Bandit"
+			CFrameQ = CFrame["new"](894.488647, 5.14000702, 4392.43359, .819155693, 0, -0.573571265, 0, 1, 0, .573571265, 0, .819155693)
+			CFrameMon = CFrame["new"](932.788818, 6.8503746, 4488.24609, -0.998625934, 3.08948351e-08, .0524050146, 2.79967303e-08, 1, -5.60361286e-08, -0.0524050146, -5.44919629e-08, -0.998625934)
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 75 and game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 89 or SelectMonster == "Desert Officer" then
+			Ms = "Desert Officer"
+			NameQuest = "DesertQuest"
+			QuestLv = 2
+			NameMon = "Desert Officer"
+			CFrameQ = CFrame["new"](894.488647, 5.14000702, 4392.43359, .819155693, 0, -0.573571265, 0, 1, 0, .573571265, 0, .819155693)
+			CFrameMon = CFrame["new"](1617.07886, 1.5542295, 4295.54932, -0.997540116, -2.26287735e-08, -0.070099175, -1.69377223e-08, 1, -8.17798806e-08, .070099175, -8.03913949e-08, -0.997540116)
+			SelectMonster = "Desert Bandit"
+			Next_Level_X = 90
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 90 and game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 99 or SelectMonster == "Snow Bandit" then
+			Ms = "Snow Bandit"
+			NameQuest = "SnowQuest"
+			QuestLv = 1
+			NameMon = "Snow Bandit"
+			CFrameQ = CFrame["new"](1389.74451, 86.6520844, -1298.90796, -0.342042685, 0, .939684391, 0, 1, 0, -0.939684391, 0, -0.342042685)
+			CFrameMon = CFrame["new"](1412.92346, 55.3503647, -1260.62036, -0.246266365, -0.0169920288, -0.969053388, .000432241941, .999844253, -0.0176417865, .969202161, -0.00476344163, -0.246220857)
+			if SelectMonster == "Snow Bandit" then
+			else
+				Next_Level_X = 100
+			end
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 110 then
+				SelectBoss_P = "Yeti"
+			end
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 100 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 119 or SelectMonster == "Snowman" then
+			Next_Level_X = 120
+			Ms = "Snowman"
+			NameQuest = "SnowQuest"
+			QuestLv = 2
+			NameMon = "Snowman"
+			CFrameQ = CFrame["new"](1389.74451, 86.6520844, -1298.90796, -0.342042685, 0, .939684391, 0, 1, 0, -0.939684391, 0, -0.342042685)
+			CFrameMon = CFrame["new"](1376.86401, 97.2779999, -1396.93115, -0.986755967, 7.71178321e-08, -0.162211925, 7.71531674e-08, 1, 6.08143536e-09, .162211925, -6.51427134e-09, -0.986755967)
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 110 then
+				SelectBoss_P = "Yeti"
+			end
+			SelectMonster = "Snow Bandit"
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 120 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 174 or SelectMonster == "Chief Petty Officer" then
+			Ms = "Chief Petty Officer"
+			NameQuest = "MarineQuest2"
+			QuestLv = 1
+			NameMon = "Chief Petty Officer"
+			CFrameQ = CFrame["new"](-5039.58643, 27.3500385, 4324.68018, 0, 0, -1, 0, 1, 0, 1, 0, 0)
+			CFrameMon = CFrame["new"](-4882.8623, 22.6520386, 4255.53516, .273695946, -5.40380647e-08, -0.96181643, 4.37720793e-08, 1, -4.37274998e-08, .96181643, -3.01326679e-08, .273695946)
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 130 then
+				SelectBoss_P = "Vice Admiral"
+			end
+			if SelectMonster == "Chief Petty Officer" then
+			else
+				Next_Level_X = 175
+			end
+		elseif SelectMonster == "Sky Bandit" then
+			Ms = "Sky Bandit"
+			NameQuest = "SkyQuest"
+			QuestLv = 1
+			NameMon = "Sky Bandit"
+			CFrameQ = CFrame["new"](-4839.53027, 716.368591, -2619.44165, .866007268, 0, .500031412, 0, 1, 0, -0.500031412, 0, .866007268)
+			CFrameMon = CFrame["new"](-4959.51367, 365.39267, -2974.56812, .964867651, 7.74418396e-08, .262737453, -6.95931988e-08, 1, -3.91783708e-08, -0.262737453, 1.95171506e-08, .964867651)
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 175 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 189 or SelectMonster == "Dark Master" then
+			Ms = "Dark Master"
+			NameQuest = "SkyQuest"
+			QuestLv = 2
+			NameMon = "Dark Master"
+			CFrameQ = CFrame["new"](-4839.53027, 716.368591, -2619.44165, .866007268, 0, .500031412, 0, 1, 0, -0.500031412, 0, .866007268)
+			CFrameMon = CFrame["new"](-5079.98096, 376.477356, -2194.17139, .465965867, -3.69776352e-08, .884802461, 3.40249851e-09, 1, 4.00000886e-08, -0.884802461, -1.56281423e-08, .465965867)
+			SelectMonster = "Sky Bandit"
+			if SelectMonster == "Dark Master" then
+			else
+				Next_Level_X = 190
+			end
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 190 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 209 or SelectMonster == "Prisoner" then
+			Ms = "Prisoner"
+			QuestLv = 1
+			NameQuest = "PrisonerQuest"
+			NameMon = "Prisoner"
+			CFrameQ = CFrame["new"](5308.93115, 1.65517521, 475.120514, -0.0894274712, -5.00292918e-09, -0.995993316, 1.60817859e-09, 1, -5.16744869e-09, .995993316, -2.06384709e-09, -0.0894274712)
+			CFrameMon = CFrame["new"](5433.39307, 88.678093, 514.986877, .879988372, 0, -0.474995494, 0, 1, 0, .474995494, 0, .879988372)
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 220 then
+				SelectBoss_P = "Warden"
+			end
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 232 then
+				SelectBoss_P = "Chief Warden"
+			end
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 242 then
+				SelectBoss_P = "Thunder God"
+			end
+			if SelectMonster == "Prisoner" then
+			else
+				Next_Level_X = 210
+			end
+			Bypass_TP_Dis = true
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 210 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 249 or SelectMonster == "Dangerous Prisoner" then
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 220 then
+				SelectBoss_P = "Warden"
+			end
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 232 then
+				SelectBoss_P = "Chief Warden"
+			end
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 242 then
+				SelectBoss_P = "Thunder God"
+			end
+			Ms = "Dangerous Prisoner"
+			QuestLv = 2
+			NameQuest = "PrisonerQuest"
+			NameMon = "Dangerous Prisoner"
+			CFrameQ = CFrame["new"](5308.93115, 1.65517521, 475.120514, -0.0894274712, -5.00292918e-09, -0.995993316, 1.60817859e-09, 1, -5.16744869e-09, .995993316, -2.06384709e-09, -0.0894274712)
+			CFrameMon = CFrame["new"](5433.39307, 88.678093, 514.986877, .879988372, 0, -0.474995494, 0, 1, 0, .474995494, 0, .879988372)
+			SelectMonster = "Prisoner"
+			Next_Level_X = 250
+			Bypass_TP_Dis = true
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 250 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 274 or SelectMonster == "Toga Warrior" then
+			Ms = "Toga Warrior"
+			NameQuest = "ColosseumQuest"
+			QuestLv = 1
+			NameMon = "Toga Warrior"
+			CFrameQ = CFrame["new"](-1576.11743, 7.38933945, -2983.30762, .576966345, 1.22114863e-09, .816767931, -3.58496594e-10, 1, -1.24185606e-09, -0.816767931, 4.2370063e-10, .576966345)
+			CFrameMon = CFrame["new"](-1779.97583, 44.6077499, -2736.35474, .984437346, 4.10396339e-08, .175734788, -3.62286876e-08, 1, -3.05844168e-08, -0.175734788, 2.3741821e-08, .984437346)
+			if SelectMonster == "Toga Warrior" then
+			else
+				Next_Level_X = 275
+			end
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 275 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 299 or SelectMonster == "Gladiator" then
+			Ms = "Gladiator"
+			NameQuest = "ColosseumQuest"
+			QuestLv = 2
+			NameMon = "Gladiator"
+			CFrameQ = CFrame["new"](-1576.11743, 7.38933945, -2983.30762, .576966345, 1.22114863e-09, .816767931, -3.58496594e-10, 1, -1.24185606e-09, -0.816767931, 4.2370063e-10, .576966345)
+			CFrameMon = CFrame["new"](-1274.75903, 58.1895943, -3188.16309, .464524001, 6.21005611e-08, .885560572, -4.80449414e-09, 1, -6.76054768e-08, -0.885560572, 2.71497012e-08, .464524001)
+			SelectMonster = "Toga Warrior"
+			Next_Level_X = 300
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 300 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 324 or SelectMonster == "Military Soldier" then
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 350 then
+				SelectBoss_P = "Magma Admiral"
+			end
+			Ms = "Military Soldier"
+			NameQuest = "MagmaQuest"
+			QuestLv = 1
+			NameMon = "Military Soldier"
+			CFrameQ = CFrame["new"](-5316.55859, 12.2370615, 8517.2998, .588437557, -1.37880001e-08, -0.808542669, -2.10116209e-08, 1, -3.23446478e-08, .808542669, 3.60215964e-08, .588437557)
+			CFrameMon = CFrame["new"](-5363.01123, 41.5056877, 8548.47266, -0.578253984, -3.29503091e-10, .815856814, 9.11209668e-08, 1, 6.498761e-08, -0.815856814, 1.11920997e-07, -0.578253984)
+			if SelectMonster == "Military Soldier" then
+			else
+				Next_Level_X = 325
+			end
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 325 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 374 or SelectMonster == "Military Spy" then
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 350 then
+				SelectBoss_P = "Magma Admiral"
+			end
+			Ms = "Military Spy"
+			NameQuest = "MagmaQuest"
+			QuestLv = 2
+			NameMon = "Military Spy"
+			CFrameQ = CFrame["new"](-5316.55859, 12.2370615, 8517.2998, .588437557, -1.37880001e-08, -0.808542669, -2.10116209e-08, 1, -3.23446478e-08, .808542669, 3.60215964e-08, .588437557)
+			CFrameMon = CFrame["new"](-5787.99023, 120.864456, 8762.25293, -0.188358366, -1.84706277e-08, .982100308, -1.23782129e-07, 1, -4.93306951e-09, -0.982100308, -1.22495649e-07, -0.188358366)
+			SelectMonster = "Military Soldier"
+			Next_Level_X = 375
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 375 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 399 or SelectMonster == "Fishman Warrior" then
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 425 then
+				SelectBoss_P = "Fishman Lord"
+			end
+			Ms = "Fishman Warrior"
+			NameQuest = "FishmanQuest"
+			QuestLv = 1
+			NameMon = "Fishman Warrior"
+			CFrameQ = CFrame["new"](61122.5625, 18.4716396, 1568.16504)
+			CFrameMon = CFrame["new"](60946.6094, 48.6735229, 1525.91687, -0.0817126185, 8.90751153e-08, .996655822, 2.00889794e-08, 1, -8.77269599e-08, -0.996655822, 1.28533992e-08, -0.0817126185)
+			if SelectMonster == "Fishman Warrior" then
+			else
+				Next_Level_X = 400
+			end
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 400 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 449 or SelectMonster == "Fishman Commando" then
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 425 then
+				SelectBoss_P = "Fishman Lord"
+			end
+			Ms = "Fishman Commando"
+			NameQuest = "FishmanQuest"
+			QuestLv = 2
+			NameMon = "Fishman Commando"
+			CFrameQ = CFrame["new"](61122.5625, 18.4716396, 1568.16504)
+			CFrameMon = CFrame["new"](61902.7383, 18.4828358, 1478.33936, -0.803795099, 0, -0.594906271, 0, 1, 0, .594906271, 0, -0.803795099)
+			if SelectMonster == "Fishman Commando" then
+			else
+				Next_Level_X = 450
+			end
+			SelectMonster = "Fishman Warrior"
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 450 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 474 or SelectMonster == "God's Guard" then
+			Ms = "God's Guard"
+			NameQuest = "SkyExp1Quest"
+			QuestLv = 1
+			NameMon = "God's Guards"
+			CFrameQ = CFrame["new"](-4721.71436, 845.277161, -1954.20105)
+			CFrameMon = CFrame["new"](-4716.95703, 853.089722, -1933.925427)
+			if SelectMonster == "God's Guard" then
+			else
+				Next_Level_X = 475
+			end
+			SelectMonster = "Fishman Commando"
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 475 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 524 or SelectMonster == "Shanda" then
+			Ms = "Shanda"
+			NameQuest = "SkyExp1Quest"
+			QuestLv = 2
+			NameMon = "Shandas"
+			CFrameQ = CFrame["new"](-7859.09814, 5544.19043, -381.476196)
+			CFrameMon = CFrame["new"](-7904.57373, 5584.37646, -459.62973)
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 500 then
+				SelectBoss_P = "Wysper"
+			end
+			if SelectMonster == "Shanda" then
+			else
+				Next_Level_X = 525
+			end
+			SelectMonster = "God's Guard"
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 525 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 549 or SelectMonster == "Royal Squad" then
 			Ms = "Royal Squad"
 			NameQuest = "SkyExp2Quest"
 			QuestLv = 1
 			NameMon = "Royal Squad"
-			CFrameQ = CFrame.new(-7906.81592, 5634.6626, -1411.99194, 0, 0, -1, 0, 1, 0, 1, 0, 0)
-			CFrameMon = CFrame.new(-7624.25244140625, 5658.13330078125, -1467.354248046875)
-		elseif MyLevel >= 550 and MyLevel <= 624 then
+			CFrameQ = CFrame["new"](-7906.81592, 5634.6626, -1411.99194, 0, 0, -1, 0, 1, 0, 1, 0, 0)
+			CFrameMon = CFrame["new"](-7555.04199, 5606.90479, -1303.24744, -0.896107852, -9.6057462e-10, -0.443836004, -4.24974544e-09, 1, 6.41599973e-09, .443836004, 7.63560326e-09, -0.896107852)
+			if SelectMonster == "Royal Squad" then
+			else
+				Next_Level_X = 550
+			end
+			SelectMonster = "Shanda"
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 550 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 624 or SelectMonster == "Royal Soldier" then
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 575 then
+				SelectBoss_P = "Thunder God"
+			end
 			Ms = "Royal Soldier"
 			NameQuest = "SkyExp2Quest"
 			QuestLv = 2
 			NameMon = "Royal Soldier"
-			CFrameQ = CFrame.new(-7906.81592, 5634.6626, -1411.99194, 0, 0, -1, 0, 1, 0, 1, 0, 0)
-			CFrameMon = CFrame.new(-7836.75341796875, 5645.6640625, -1790.6236572265625)
-		elseif MyLevel >= 625 and MyLevel <= 649 then
+			CFrameQ = CFrame["new"](-7906.81592, 5634.6626, -1411.99194, 0, 0, -1, 0, 1, 0, 1, 0, 0)
+			CFrameMon = CFrame["new"](-7837.31152, 5649.65186, -1791.08582, -0.716008604, .0104285581, -0.698013008, 5.02521061e-06, .99988848, .0149335321, .69809103, .0106890313, -0.715928733)
+			if SelectMonster == "Royal Soldier" then
+			else
+				Next_Level_X = 625
+			end
+			SelectMonster = "Royal Squad"
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 625 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 649 or SelectMonster == "Galley Pirate" then
 			Ms = "Galley Pirate"
 			NameQuest = "FountainQuest"
 			QuestLv = 1
 			NameMon = "Galley Pirate"
-			CFrameQ = CFrame.new(5259.81982, 37.3500175, 4050.0293, 0.087131381, 0, 0.996196866, 0, 1, 0, -0.996196866, 0, 0.087131381)
-			CFrameMon = CFrame.new(5551.02197265625, 78.90135192871094, 3930.412841796875)
-		elseif MyLevel >= 650 then
+			CFrameQ = CFrame["new"](5259.81982, 37.3500175, 4050.0293, .087131381, 0, .996196866, 0, 1, 0, -0.996196866, 0, .087131381)
+			CFrameMon = CFrame["new"](5569.80518, 38.5269432, 3849.01196, .896460414, 3.98027495e-08, .443124533, -1.34262139e-08, 1, -6.26611296e-08, -0.443124533, 5.02237434e-08, .896460414)
+			if SelectMonster == "Galley Pirate" then
+			else
+				Next_Level_X = 650
+			end
+		elseif game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 650 or SelectMonster == "Galley Captain" then
+			if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] >= 675 then
+				SelectBoss_P = "Cyborg"
+			end
 			Ms = "Galley Captain"
 			NameQuest = "FountainQuest"
 			QuestLv = 2
 			NameMon = "Galley Captain"
-			CFrameQ = CFrame.new(5259.81982, 37.3500175, 4050.0293, 0.087131381, 0, 0.996196866, 0, 1, 0, -0.996196866, 0, 0.087131381)
-			CFrameMon = CFrame.new(5441.95166015625, 42.50205993652344, 4950.09375)
-elseif World2 then
-		if MyLevel >= 700 and MyLevel <= 724 then
-			Mon = "Raider";
-			LevelQuest = 1;
-			NameQuest = "Area1Quest";
-			NameMon = "Raider";
-			CFrameQuest = CFrame.new(-429.543518, 71.7699966, 1836.18188, -0.22495985, 0, -0.974368095, 0, 1, 0, .974368095, 0, -0.22495985);
-			CFrameMon = CFrame.new(-728.32672119141, 52.779319763184, 2345.7705078125);
-		elseif MyLevel >= 725 and MyLevel <= 774 then
-			Mon = "Mercenary";
-			LevelQuest = 2;
-			NameQuest = "Area1Quest";
-			NameMon = "Mercenary";
-			CFrameQuest = CFrame.new(-429.543518, 71.7699966, 1836.18188, -0.22495985, 0, -0.974368095, 0, 1, 0, .974368095, 0, -0.22495985);
-			CFrameMon = CFrame.new(-1004.3244018555, 80.158866882324, 1424.6193847656);
-		elseif MyLevel >= 775 and MyLevel <= 799 then
-			Mon = "Swan Pirate";
-			LevelQuest = 1;
-			NameQuest = "Area2Quest";
-			NameMon = "Swan Pirate";
-			CFrameQuest = CFrame.new(638.43811, 71.769989, 918.282898, .139203906, 0, .99026376, 0, 1, 0, -0.99026376, 0, .139203906);
-			CFrameMon = CFrame.new(1068.6643066406, 137.61428833008, 1322.1060791016);
-		elseif MyLevel >= 800 and MyLevel <= 874 then
-			Mon = "Factory Staff";
-			NameQuest = "Area2Quest";
-			LevelQuest = 2;
-			NameMon = "Factory Staff";
-			CFrameQuest = CFrame.new(632.698608, 73.1055908, 918.666321, -0.0319722369, 8.96074881e-10, -0.999488771, 1.36326533e-10, 1, 8.92172336e-10, .999488771, -1.07732087e-10, -0.0319722369);
-			CFrameMon = CFrame.new(73.078674316406, 81.863441467285, -27.470672607422);
-		elseif MyLevel >= 875 and MyLevel <= 899 then
-			Mon = "Marine Lieutenant";
-			LevelQuest = 1;
-			NameQuest = "MarineQuest3";
-			NameMon = "Marine Lieutenant";
-			CFrameQuest = CFrame.new(-2440.79639, 71.7140732, -3216.06812, .866007268, 0, .500031412, 0, 1, 0, -0.500031412, 0, .866007268);
-			CFrameMon = CFrame.new(-2821.3723144531, 75.897277832031, -3070.0891113281);
-		elseif MyLevel >= 900 and MyLevel <= 949 then
-			Mon = "Marine Captain";
-			LevelQuest = 2;
-			NameQuest = "MarineQuest3";
-			NameMon = "Marine Captain";
-			CFrameQuest = CFrame.new(-2440.79639, 71.7140732, -3216.06812, .866007268, 0, .500031412, 0, 1, 0, -0.500031412, 0, .866007268);
-			CFrameMon = CFrame.new(-1861.2310791016, 80.176582336426, -3254.6975097656);
-		elseif MyLevel >= 950 and MyLevel <= 974 then
-			Mon = "Zombie";
-			LevelQuest = 1;
-			NameQuest = "ZombieQuest";
-			NameMon = "Zombie";
-			CFrameQuest = CFrame.new(-5497.06152, 47.5923004, -795.237061, -0.29242146, 0, -0.95628953, 0, 1, 0, .95628953, 0, -0.29242146);
-			CFrameMon = CFrame.new(-5657.7768554688, 78.969734191895, -928.68701171875);
-		elseif MyLevel >= 975 and MyLevel <= 999 then
-			Mon = "Vampire";
-			LevelQuest = 2;
-			NameQuest = "ZombieQuest";
-			NameMon = "Vampire";
-			CFrameQuest = CFrame.new(-5497.06152, 47.5923004, -795.237061, -0.29242146, 0, -0.95628953, 0, 1, 0, .95628953, 0, -0.29242146);
-			CFrameMon = CFrame.new(-6037.66796875, 32.184638977051, -1340.6597900391);
-		elseif MyLevel >= 1000 and MyLevel <= 1049 then
-			Mon = "Snow Trooper";
-			LevelQuest = 1;
-			NameQuest = "SnowMountainQuest";
-			NameMon = "Snow Trooper";
-			CFrameQuest = CFrame.new(609.858826, 400.119904, -5372.25928, -0.374604106, 0, .92718488, 0, 1, 0, -0.92718488, 0, -0.374604106);
-			CFrameMon = CFrame.new(549.14733886719, 427.38705444336, -5563.6987304688);
-		elseif MyLevel >= 1050 and MyLevel <= 1099 then
-			Mon = "Winter Warrior";
-			LevelQuest = 2;
-			NameQuest = "SnowMountainQuest";
-			NameMon = "Winter Warrior";
-			CFrameQuest = CFrame.new(609.858826, 400.119904, -5372.25928, -0.374604106, 0, .92718488, 0, 1, 0, -0.92718488, 0, -0.374604106);
-			CFrameMon = CFrame.new(1142.7451171875, 475.63980102539, -5199.4165039062);
-		elseif MyLevel >= 1100 and MyLevel <= 1124 then
-			Mon = "Lab Subordinate";
-			LevelQuest = 1;
-			NameQuest = "IceSideQuest";
-			NameMon = "Lab Subordinate";
-			CFrameQuest = CFrame.new(-6064.06885, 15.2422857, -4902.97852, .453972578, 0, -0.891015649, 0, 1, 0, .891015649, 0, .453972578);
-			CFrameMon = CFrame.new(-5707.4716796875, 15.951709747314, -4513.3920898438);
-		elseif MyLevel >= 1125 and MyLevel <= 1174 then
-			Mon = "Horned Warrior";
-			LevelQuest = 2;
-			NameQuest = "IceSideQuest";
-			NameMon = "Horned Warrior";
-			CFrameQuest = CFrame.new(-6064.06885, 15.2422857, -4902.97852, .453972578, 0, -0.891015649, 0, 1, 0, .891015649, 0, .453972578);
-			CFrameMon = CFrame.new(-6341.3666992188, 15.951770782471, -5723.162109375);
-		elseif MyLevel >= 1175 and MyLevel <= 1199 then
-			Mon = "Magma Ninja";
-			LevelQuest = 1;
-			NameQuest = "FireSideQuest";
-			NameMon = "Magma Ninja";
-			CFrameQuest = CFrame.new(-5428.03174, 15.0622921, -5299.43457, -0.882952213, 0, .469463557, 0, 1, 0, -0.469463557, 0, -0.882952213);
-			CFrameMon = CFrame.new(-5449.6728515625, 76.658744812012, -5808.2006835938);
-		elseif MyLevel >= 1200 and MyLevel <= 1249 then
-			Mon = "Lava Pirate";
-			LevelQuest = 2;
-			NameQuest = "FireSideQuest";
-			NameMon = "Lava Pirate";
-			CFrameQuest = CFrame.new(-5428.03174, 15.0622921, -5299.43457, -0.882952213, 0, .469463557, 0, 1, 0, -0.469463557, 0, -0.882952213);
-			CFrameMon = CFrame.new(-5213.3315429688, 49.737880706787, -4701.451171875);
-		elseif MyLevel >= 1250 and MyLevel <= 1274 then
-			Mon = "Ship Deckhand";
-			LevelQuest = 1;
-			NameQuest = "ShipQuest1";
-			NameMon = "Ship Deckhand";
-			CFrameQuest = CFrame.new(1037.80127, 125.092171, 32911.6016);
-			CFrameMon = CFrame.new(1212.0111083984, 150.79205322266, 33059.24609375);
-			if (getgenv()).AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10000 then
-				(game:GetService("ReplicatedStorage")).Remotes.CommF_:InvokeServer("requestEntrance", Vector3.new(923.21252441406, 126.9760055542, 32852.83203125));
-			end;
-		elseif MyLevel >= 1275 and MyLevel <= 1299 then
-			Mon = "Ship Engineer";
-			LevelQuest = 2;
-			NameQuest = "ShipQuest1";
-			NameMon = "Ship Engineer";
-			CFrameQuest = CFrame.new(1037.80127, 125.092171, 32911.6016);
-			CFrameMon = CFrame.new(919.47863769531, 43.544013977051, 32779.96875);
-			if (getgenv()).AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10000 then
-				(game:GetService("ReplicatedStorage")).Remotes.CommF_:InvokeServer("requestEntrance", Vector3.new(923.21252441406, 126.9760055542, 32852.83203125));
-			end;
-		elseif MyLevel >= 1300 and MyLevel <= 1324 then
-			Mon = "Ship Steward";
-			LevelQuest = 1;
-			NameQuest = "ShipQuest2";
-			NameMon = "Ship Steward";
-			CFrameQuest = CFrame.new(968.80957, 125.092171, 33244.125);
-			CFrameMon = CFrame.new(919.43853759766, 129.55599975586, 33436.03515625);
-			if (getgenv()).AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10000 then
-				(game:GetService("ReplicatedStorage")).Remotes.CommF_:InvokeServer("requestEntrance", Vector3.new(923.21252441406, 126.9760055542, 32852.83203125));
-			end;
-		elseif MyLevel >= 1325 and MyLevel <= 1349 then
-			Mon = "Ship Officer";
-			LevelQuest = 2;
-			NameQuest = "ShipQuest2";
-			NameMon = "Ship Officer";
-			CFrameQuest = CFrame.new(968.80957, 125.092171, 33244.125);
-			CFrameMon = CFrame.new(1036.0179443359, 181.4390411377, 33315.7265625);
-			if (getgenv()).AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10000 then
-				(game:GetService("ReplicatedStorage")).Remotes.CommF_:InvokeServer("requestEntrance", Vector3.new(923.21252441406, 126.9760055542, 32852.83203125));
-			end;
-		elseif MyLevel >= 1350 and MyLevel <= 1374 then
-			Mon = "Arctic Warrior";
-			LevelQuest = 1;
-			NameQuest = "FrostQuest";
-			NameMon = "Arctic Warrior";
-			CFrameQuest = CFrame.new(5667.6582, 26.7997818, -6486.08984, -0.933587909, 0, -0.358349502, 0, 1, 0, .358349502, 0, -0.933587909);
-			CFrameMon = CFrame.new(5966.24609375, 62.970020294189, -6179.3828125);
-			if (getgenv()).AutoFarm and (CFrameQuest.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude > 10000 then
-				(game:GetService("ReplicatedStorage")).Remotes.CommF_:InvokeServer("requestEntrance", Vector3.new(-6508.5581054688, 5000.0349960327, -132.83953857422));
-			end;
-		elseif MyLevel >= 1375 and MyLevel <= 1424 then
-			Mon = "Snow Lurker";
-			LevelQuest = 2;
-			NameQuest = "FrostQuest";
-			NameMon = "Snow Lurker";
-			CFrameQuest = CFrame.new(5667.6582, 26.7997818, -6486.08984, -0.933587909, 0, -0.358349502, 0, 1, 0, .358349502, 0, -0.933587909);
-			CFrameMon = CFrame.new(5407.0737304688, 69.194374084473, -6880.8803710938);
-		elseif MyLevel >= 1425 and MyLevel <= 1449 then
-			Mon = "Sea Soldier";
-			LevelQuest = 1;
-			NameQuest = "ForgottenQuest";
-			NameMon = "Sea Soldier";
-			CFrameQuest = CFrame.new(-3054.44458, 235.544281, -10142.8193, .990270376, 0, -0.13915664, 0, 1, 0, .13915664, 0, .990270376);
-			CFrameMon = CFrame.new(-3028.2236328125, 64.674514770508, -9775.4267578125);
-		elseif MyLevel >= 1450 then
-			Mon = "Water Fighter";
-			LevelQuest = 2;
-			NameQuest = "ForgottenQuest";
-			NameMon = "Water Fighter";
-			CFrameQuest = CFrame.new(-3054, 240, -10146);
-			CFrameMon = CFrame.new(-3291, 252, -10501);
-		end;
-	elseif World3 then
-		if MyLevel >= 1500 and MyLevel <= 1524 then
-			Mon = "Pirate Millionaire";
-			LevelQuest = 1;
-			NameQuest = "PiratePortQuest";
-			NameMon = "Pirate Millionaire";
-			CFrameQuest = CFrame.new(-290.074677, 42.9034653, 5581.58984, .965929627, 0, -0.258804798, 0, 1, 0, .258804798, 0, .965929627);
-			CFrameMon = CFrame.new(-245.99638366699, 47.30615234375, 5584.1005859375);
-		elseif MyLevel >= 1525 and MyLevel <= 1574 then
-			Mon = "Pistol Billionaire";
-			LevelQuest = 2;
-			NameQuest = "PiratePortQuest";
-			NameMon = "Pistol Billionaire";
-			CFrameQuest = CFrame.new(-290.074677, 42.9034653, 5581.58984, .965929627, 0, -0.258804798, 0, 1, 0, .258804798, 0, .965929627);
-			CFrameMon = CFrame.new(-187.33015441895, 86.239875793457, 6013.513671875);
-		elseif MyLevel >= 1575 and MyLevel <= 1599 then
-			Mon = "Dragon Crew Warrior";
-			LevelQuest = 1;
-			NameQuest = "DragonCrewQuest";
-			NameMon = "Dragon Crew Warrior";
-			CFrameQuest = CFrame.new(6738.9614257812, 127.81645965576, -713.51147460938);
-			CFrameMon = CFrame.new(6920.7143554688, 56.1559715271, -942.50445556641);
-		elseif MyLevel >= 1600 and MyLevel <= 1624 then
-			Mon = "Dragon Crew Archer";
-			NameQuest = "DragonCrewQuest";
-			LevelQuest = 2;
-			NameMon = "Dragon Crew Archer";
-			CFrameQuest = CFrame.new(6738.9614257812, 127.81645965576, -713.51147460938);
-			CFrameMon = CFrame.new(6817.9125976562, 484.80444335938, 513.41412353516);
-		elseif MyLevel >= 1625 and MyLevel <= 1649 then
-			Mon = "Hydra Enforcer";
-			NameQuest = "VenomCrewQuest";
-			LevelQuest = 1;
-			NameMon = "Hydra Enforcer";
-			CFrameQuest = CFrame.new(5213.8740234375, 1004.5042724609, 758.69445800781);
-			CFrameMon = CFrame.new(4584.6928710938, 1002.6435546875, 705.7958984375);
-		elseif MyLevel >= 1650 and MyLevel <= 1699 then
-			Mon = "Venomous Assailant";
-			NameQuest = "VenomCrewQuest";
-			LevelQuest = 2;
-			NameMon = "Venomous Assailant";
-			CFrameQuest = CFrame.new(5213.8740234375, 1004.5042724609, 758.69445800781);
-			CFrameMon = CFrame.new(4638.7856445312, 1078.9409179688, 881.80023193359);
-		elseif MyLevel >= 1700 and MyLevel <= 1724 then
-			Mon = "Marine Commodore";
-			LevelQuest = 1;
-			NameQuest = "MarineTreeIsland";
-			NameMon = "Marine Commodore";
-			CFrameQuest = CFrame.new(2180.54126, 27.8156815, -6741.5498, -0.965929747, 0, .258804798, 0, 1, 0, -0.258804798, 0, -0.965929747);
-			CFrameMon = CFrame.new(2286.0078125, 73.133918762207, -7159.8090820312);
-		elseif MyLevel >= 1725 and MyLevel <= 1774 then
-			Mon = "Marine Rear Admiral";
-			NameMon = "Marine Rear Admiral";
-			NameQuest = "MarineTreeIsland";
-			LevelQuest = 2;
-			CFrameQuest = CFrame.new(2179.98828125, 28.731239318848, -6740.0551757813);
-			CFrameMon = CFrame.new(3656.7736816406, 160.52406311035, -7001.5986328125);
-		elseif MyLevel >= 1775 and MyLevel <= 1799 then
-			Mon = "Fishman Raider";
-			LevelQuest = 1;
-			NameQuest = "DeepForestIsland3";
-			NameMon = "Fishman Raider";
-			CFrameQuest = CFrame.new(-10581.6563, 330.872955, -8761.18652, -0.882952213, 0, .469463557, 0, 1, 0, -0.469463557, 0, -0.882952213);
-			CFrameMon = CFrame.new(-10407.526367188, 331.76263427734, -8368.5166015625);
-		elseif MyLevel >= 1800 and MyLevel <= 1824 then
-			Mon = "Fishman Captain";
-			LevelQuest = 2;
-			NameQuest = "DeepForestIsland3";
-			NameMon = "Fishman Captain";
-			CFrameQuest = CFrame.new(-10581.6563, 330.872955, -8761.18652, -0.882952213, 0, .469463557, 0, 1, 0, -0.469463557, 0, -0.882952213);
-			CFrameMon = CFrame.new(-10994.701171875, 352.38140869141, -9002.1103515625);
-		elseif MyLevel >= 1825 and MyLevel <= 1849 then
-			Mon = "Forest Pirate";
-			LevelQuest = 1;
-			NameQuest = "DeepForestIsland";
-			NameMon = "Forest Pirate";
-			CFrameQuest = CFrame.new(-13234.04, 331.488495, -7625.40137, .707134247, 0, -0.707079291, 0, 1, 0, .707079291, 0, .707134247);
-			CFrameMon = CFrame.new(-13274.478515625, 332.37814331055, -7769.5805664062);
-		elseif MyLevel >= 1850 and MyLevel <= 1899 then
-			Mon = "Mythological Pirate";
-			LevelQuest = 2;
-			NameQuest = "DeepForestIsland";
-			NameMon = "Mythological Pirate";
-			CFrameQuest = CFrame.new(-13234.04, 331.488495, -7625.40137, .707134247, 0, -0.707079291, 0, 1, 0, .707079291, 0, .707134247);
-			CFrameMon = CFrame.new(-13680.607421875, 501.08154296875, -6991.189453125);
-		elseif MyLevel >= 1900 and MyLevel <= 1924 then
-			Mon = "Jungle Pirate";
-			LevelQuest = 1;
-			NameQuest = "DeepForestIsland2";
-			NameMon = "Jungle Pirate";
-			CFrameQuest = CFrame.new(-12680.3818, 389.971039, -9902.01953, -0.0871315002, 0, .996196866, 0, 1, 0, -0.996196866, 0, -0.0871315002);
-			CFrameMon = CFrame.new(-12256.16015625, 331.73828125, -10485.836914062);
-		elseif MyLevel >= 1925 and MyLevel <= 1974 then
-			Mon = "Musketeer Pirate";
-			LevelQuest = 2;
-			NameQuest = "DeepForestIsland2";
-			NameMon = "Musketeer Pirate";
-			CFrameQuest = CFrame.new(-12680.3818, 389.971039, -9902.01953, -0.0871315002, 0, .996196866, 0, 1, 0, -0.996196866, 0, -0.0871315002);
-			CFrameMon = CFrame.new(-13457.904296875, 391.54565429688, -9859.177734375);
-		elseif MyLevel >= 1975 and MyLevel <= 1999 then
-			Mon = "Reborn Skeleton";
-			LevelQuest = 1;
-			NameQuest = "HauntedQuest1";
-			NameMon = "Reborn Skeleton";
-			CFrameQuest = CFrame.new(-9479.2168, 141.215088, 5566.09277, 0, 0, 1, 0, 1, 0, -1, 0, 0);
-			CFrameMon = CFrame.new(-8763.7236328125, 165.72299194336, 6159.8618164062);
-		elseif MyLevel >= 2000 and MyLevel <= 2024 then
-			Mon = "Living Zombie";
-			LevelQuest = 2;
-			NameQuest = "HauntedQuest1";
-			NameMon = "Living Zombie";
-			CFrameQuest = CFrame.new(-9479.2168, 141.215088, 5566.09277, 0, 0, 1, 0, 1, 0, -1, 0, 0);
-			CFrameMon = CFrame.new(-10144.131835938, 138.6266784668, 5838.0888671875);
-		elseif MyLevel >= 2025 and MyLevel <= 2049 then
-			Mon = "Demonic Soul";
-			LevelQuest = 1;
-			NameQuest = "HauntedQuest2";
-			NameMon = "Demonic Soul";
-			CFrameQuest = CFrame.new(-9516.99316, 172.017181, 6078.46533, 0, 0, -1, 0, 1, 0, 1, 0, 0);
-			CFrameMon = CFrame.new(-9505.8720703125, 172.10482788086, 6158.9931640625);
-		elseif MyLevel >= 2050 and MyLevel <= 2074 then
-			Mon = "Posessed Mummy";
-			LevelQuest = 2;
-			NameQuest = "HauntedQuest2";
-			NameMon = "Posessed Mummy";
-			CFrameQuest = CFrame.new(-9516.99316, 172.017181, 6078.46533, 0, 0, -1, 0, 1, 0, 1, 0, 0);
-			CFrameMon = CFrame.new(-9582.0224609375, 6.2515273094177, 6205.478515625);
-		elseif MyLevel >= 2075 and MyLevel <= 2099 then
-			Mon = "Peanut Scout";
-			LevelQuest = 1;
-			NameQuest = "NutsIslandQuest";
-			NameMon = "Peanut Scout";
-			CFrameQuest = CFrame.new(-2104.3908691406, 38.104167938232, -10194.21875, 0, 0, -1, 0, 1, 0, 1, 0, 0);
-			CFrameMon = CFrame.new(-2143.2419433594, 47.721984863281, -10029.995117188);
-		elseif MyLevel >= 2100 and MyLevel <= 2124 then
-			Mon = "Peanut President";
-			LevelQuest = 2;
-			NameQuest = "NutsIslandQuest";
-			NameMon = "Peanut President";
-			CFrameQuest = CFrame.new(-2104.3908691406, 38.104167938232, -10194.21875, 0, 0, -1, 0, 1, 0, 1, 0, 0);
-			CFrameMon = CFrame.new(-1859.3540039062, 38.103168487549, -10422.4296875);
-		elseif MyLevel >= 2125 and MyLevel <= 2149 then
-			Mon = "Ice Cream Chef";
-			LevelQuest = 1;
-			NameQuest = "IceCreamIslandQuest";
-			NameMon = "Ice Cream Chef";
-			CFrameQuest = CFrame.new(-820.64825439453, 65.819526672363, -10965.795898438, 0, 0, -1, 0, 1, 0, 1, 0, 0);
-			CFrameMon = CFrame.new(-872.24658203125, 65.81957244873, -10919.95703125);
-		elseif MyLevel >= 2150 and MyLevel <= 2199 then
-			Mon = "Ice Cream Commander";
-			LevelQuest = 2;
-			NameQuest = "IceCreamIslandQuest";
-			NameMon = "Ice Cream Commander";
-			CFrameQuest = CFrame.new(-820.64825439453, 65.819526672363, -10965.795898438, 0, 0, -1, 0, 1, 0, 1, 0, 0);
-			CFrameMon = CFrame.new(-558.06103515625, 112.04895782471, -11290.774414062);
-		elseif MyLevel >= 2200 and MyLevel <= 2224 then
-			Mon = "Cookie Crafter";
-			LevelQuest = 1;
-			NameQuest = "CakeQuest1";
-			NameMon = "Cookie Crafter";
-			CFrameQuest = CFrame.new(-2021.32007, 37.7982254, -12028.7295, .957576931, -8.80302053e-08, .288177818, 6.9301187e-08, 1, 7.51931211e-08, -0.288177818, -5.2032135e-08, .957576931);
-			CFrameMon = CFrame.new(-2374.13671875, 37.798263549805, -12125.30859375);
-		elseif MyLevel >= 2225 and MyLevel <= 2249 then
-			Mon = "Cake Guard";
-			LevelQuest = 2;
-			NameQuest = "CakeQuest1";
-			NameMon = "Cake Guard";
-			CFrameQuest = CFrame.new(-2021.32007, 37.7982254, -12028.7295, .957576931, -8.80302053e-08, .288177818, 6.9301187e-08, 1, 7.51931211e-08, -0.288177818, -5.2032135e-08, .957576931);
-			CFrameMon = CFrame.new(-1598.3070068359, 43.773197174072, -12244.581054688);
-		elseif MyLevel >= 2250 and MyLevel <= 2274 then
-			Mon = "Baking Staff";
-			LevelQuest = 1;
-			NameQuest = "CakeQuest2";
-			NameMon = "Baking Staff";
-			CFrameQuest = CFrame.new(-1927.91602, 37.7981339, -12842.5391, -0.96804446, 4.22142143e-08, .250778586, 4.74911062e-08, 1, 1.49904711e-08, -0.250778586, 2.64211941e-08, -0.96804446);
-			CFrameMon = CFrame.new(-1887.8099365234, 77.618507385254, -12998.350585938);
-		elseif MyLevel >= 2275 and MyLevel <= 2299 then
-			Mon = "Head Baker";
-			LevelQuest = 2;
-			NameQuest = "CakeQuest2";
-			NameMon = "Head Baker";
-			CFrameQuest = CFrame.new(-1927.91602, 37.7981339, -12842.5391, -0.96804446, 4.22142143e-08, .250778586, 4.74911062e-08, 1, 1.49904711e-08, -0.250778586, 2.64211941e-08, -0.96804446);
-			CFrameMon = CFrame.new(-2216.1882324219, 82.884521484375, -12869.293945312);
-		elseif MyLevel >= 2300 and MyLevel <= 2324 then
-			Mon = "Cocoa Warrior";
-			LevelQuest = 1;
-			NameQuest = "ChocQuest1";
-			NameMon = "Cocoa Warrior";
-			CFrameQuest = CFrame.new(233.22836303711, 29.876001358032, -12201.233398438);
-			CFrameMon = CFrame.new(-21.553283691406, 80.574996948242, -12352.387695312);
-		elseif MyLevel >= 2325 and MyLevel <= 2349 then
-			Mon = "Chocolate Bar Battler";
-			LevelQuest = 2;
-			NameQuest = "ChocQuest1";
-			NameMon = "Chocolate Bar Battler";
-			CFrameQuest = CFrame.new(233.22836303711, 29.876001358032, -12201.233398438);
-			CFrameMon = CFrame.new(582.59057617188, 77.188095092773, -12463.162109375);
-		elseif MyLevel >= 2350 and MyLevel <= 2374 then
-			Mon = "Sweet Thief";
-			LevelQuest = 1;
-			NameQuest = "ChocQuest2";
-			NameMon = "Sweet Thief";
-			CFrameQuest = CFrame.new(150.50663757324, 30.693693161011, -12774.502929688);
-			CFrameMon = CFrame.new(165.1884765625, 76.058853149414, -12600.836914062);
-		elseif MyLevel >= 2375 and MyLevel <= 2399 then
-			Mon = "Candy Rebel";
-			LevelQuest = 2;
-			NameQuest = "ChocQuest2";
-			NameMon = "Candy Rebel";
-			CFrameQuest = CFrame.new(150.50663757324, 30.693693161011, -12774.502929688);
-			CFrameMon = CFrame.new(134.86563110352, 77.247680664062, -12876.547851562);
-		elseif MyLevel >= 2400 and MyLevel <= 2424 then
-			Mon = "Candy Pirate";
-			LevelQuest = 1;
-			NameQuest = "CandyQuest1";
-			NameMon = "Candy Pirate";
-			CFrameQuest = CFrame.new(-1150.0400390625, 20.378934860229, -14446.334960938);
-			CFrameMon = CFrame.new(-1310.5003662109, 26.016523361206, -14562.404296875);
-		elseif MyLevel >= 2425 and MyLevel <= 2449 then
-			Mon = "Snow Demon";
-			LevelQuest = 2;
-			NameQuest = "CandyQuest1";
-			NameMon = "Snow Demon";
-			CFrameQuest = CFrame.new(-1150.0400390625, 20.378934860229, -14446.334960938);
-			CFrameMon = CFrame.new(-880.20062255859, 71.247764587402, -14538.609375);
-		elseif MyLevel >= 2450 and MyLevel <= 2474 then
-			Mon = "Isle Outlaw";
-			LevelQuest = 1;
-			NameQuest = "TikiQuest1";
-			NameMon = "Isle Outlaw";
-			CFrameQuest = CFrame.new(-16547.748046875, 61.135334014893, -173.41360473633);
-			CFrameMon = CFrame.new(-16442.814453125, 116.13899993896, -264.46377563477);
-		elseif MyLevel >= 2475 and MyLevel <= 2524 then
-			Mon = "Island Boy";
-			LevelQuest = 2;
-			NameQuest = "TikiQuest1";
-			NameMon = "Island Boy";
-			CFrameQuest = CFrame.new(-16547.748046875, 61.135334014893, -173.41360473633);
-			CFrameMon = CFrame.new(-16901.26171875, 84.067565917969, -192.88906860352);
-		elseif MyLevel >= 2525 and MyLevel <= 2550 then
-			Mon = "Isle Champion";
-			LevelQuest = 2;
-			NameQuest = "TikiQuest2";
-			NameMon = "Isle Champion";
-			CFrameQuest = CFrame.new(-16539.078125, 55.686328887939, 1051.5738525391);
-			CFrameMon = CFrame.new(-16641.6796875, 235.78254699707, 1031.2829589844);
-		elseif MyLevel >= 2550 and MyLevel <= 2574 then
-			Mon = "Serpent Hunter";
-			LevelQuest = 1;
-			NameQuest = "TikiQuest3";
-			NameMon = "Serpent Hunter";
-			CFrameQuest = CFrame.new(-16665.1914, 104.596405, 1579.69434, .951068401, 0, -0.308980465, 0, 1, 0, .308980465, 0, .951068401);
-			CFrameMon = CFrame.new(-16521.0625, 106.09285, 1488.78467, .469467044, 0, .882950008, 0, 1, 0, -0.882950008, 0, .469467044);
-		elseif MyLevel >= 2575 and MyLevel <= 2599 then
-			Mon = "Skull Slayer";
-			LevelQuest = 2;
-			NameQuest = "TikiQuest3";
-			NameMon = "Skull Slayer";
-			CFrameQuest = CFrame.new(-16665.1914, 104.596405, 1579.69434, .951068401, 0, -0.308980465, 0, 1, 0, .308980465, 0, .951068401);
-			CFrameMon = CFrame.new(-16855.043, 122.457253, 1478.15308, -0.999392271, 0, -0.0348687991, 0, 1, 0, .0348687991, 0, -0.999392271);
-		elseif MyLevel >= 2600 and MyLevel <= 2624 then
-			Mon = "Reef Bandit";
-			LevelQuest = 1;
-			NameQuest = "SubmergedQuest1";
-			NameMon = "Reef Bandit";
-			CFrameMon = CFrame.new(10943.0811, -2083.03516, 9177.33691, -0.998713255, -0.0461204648, .021090759, -0.0451571345, .998007238, .0440727882, -0.0230813865, .0430636741, -0.998805642);
-			CFrameQuest = CFrame.new(10780.107421875, -2087.7214355469, 9261.865234375);
-		elseif MyLevel >= 2625 and MyLevel <= 2649 then
-			Mon = "Coral Pirate";
-			LevelQuest = 2;
-			NameQuest = "SubmergedQuest1";
-			NameMon = "Coral Pirate";
-			CFrameQuest = CFrame.new(10780.107421875, -2087.7214355469, 9261.865234375);
-			CFrameMon = CFrame.new(10713.4473, -2093.04517, 9307.14844, .325602472, 7.02769976e-05, .945506752, -7.02769976e-05, 1, -5.01261711e-05, -0.945506752, -5.01261711e-05, .325602472);
-		elseif MyLevel >= 2650 and MyLevel <= 2674 then
-			Mon = "Sea Chanter";
-			LevelQuest = 1;
-			NameQuest = "SubmergedQuest2";
-			NameMon = "Sea Chanter";
-			CFrameQuest = CFrame.new(10883.587890625, -2086.1970214844, 10032.196289062);
-			CFrameMon = CFrame.new(10647.606445312, -2077.6257324219, 10079.962890625);
-		elseif MyLevel >= 2675 and MyLevel <= 2699 then
-			Mon = "High Disciple";
-			LevelQuest = 1;
-			NameQuest = "SubmergedQuest3";
-			NameMon = "High Disciple";
-			CFrameQuest = CFrame.new(9635.8701171875, -1992.4481201172, 9614.3935546875);
-			CFrameMon = CFrame.new(9843.578125, -1993.4559326172, 9696.48046875);
-		elseif MyLevel >= 2700 then
-			Mon = "Grand Devotee";
-			LevelQuest = 2;
-			NameQuest = "SubmergedQuest3";
-			NameMon = "Grand Devotee";
-			CFrameQuest = CFrame.new(9635.8701171875, -1992.4481201172, 9614.3935546875);
-			CFrameMon = CFrame.new(9591.0546875, -1993.4742431641, 9808.705078125);
-		end;
-	end;
-end;
+			CFrameQ = CFrame["new"](5259.81982, 37.3500175, 4050.0293, .087131381, 0, .996196866, 0, 1, 0, -0.996196866, 0, .087131381)
+			CFrameMon = CFrame["new"](5782.90186, 94.5326462, 4716.78174, .361808896, -1.24757526e-06, -0.932252586, 2.16989656e-06, 1, -4.96097414e-07, .932252586, -1.84339774e-06, .361808896)
+			SelectMonster = "Galley Pirate"
+			Next_Level_X = 9999
+		end
+	end
 	if New_World then
 		if game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] == 700 or game["Players"]["LocalPlayer"]["Data"]["Level"]["Value"] <= 724 or SelectMonster == "Raider" then
 			Ms = "Raider"
@@ -3907,47 +3686,24 @@ L_1_[8] = function()
 	end
 end
 function TPZ(L_30_arg0)
-    local char = game.Players.LocalPlayer.Character
-    if not char then return end
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    if not hrp then return end
-    
-    -- Fix chìm nước
-    if hrp.Position.Y < 15 then
-        hrp.CFrame = CFrame.new(hrp.Position.X, 50, hrp.Position.Z)
-        task.wait(0.1)
-    end
-    
-    local distance = (L_30_arg0.Position - hrp.Position).Magnitude
-    if distance < 5 then return end
-    
-    -- Hủy Tween cũ
-    if L_1_[23] then
-        pcall(function() L_1_[23]:Cancel() end)
-        L_1_[23] = nil
-    end
-    
-    -- Tính tốc độ
-    local speed = 300
-    if distance > 1500 then speed = 350 end
-    if distance > 5000 then speed = 500 end
-    if distance > 10000 then speed = 800 end
-    
-    L_1_[23] = game:GetService("TweenService"):Create(hrp, 
-        TweenInfo.new(distance / speed, Enum.EasingStyle.Linear), 
-        {CFrame = L_30_arg0}
-    )
-    L_1_[23]:Play()
-    
-    -- Timeout tránh treo
-    local start = tick()
-    while L_1_[23] and L_1_[23].PlaybackState == Enum.PlaybackState.Playing do
-        if tick() - start > 20 then 
-            L_1_[23]:Cancel()
-            break 
-        end
-        task.wait()
-    end
+	local L_31_ = {}
+	L_31_[2] = L_30_arg0
+	L_31_[1] = (L_31_[2]["Position"] - game["Players"]["LocalPlayer"]["Character"]["HumanoidRootPart"]["Position"])["Magnitude"]
+	if L_31_[1] < 100 then
+		L_31_[4] = 50
+	elseif L_31_[1] < 400 then
+		L_31_[4] = 400
+	elseif L_31_[1] < 1000 then
+		L_31_[4] = 300
+	elseif L_31_[1] < 1500 then
+		L_31_[4] = 260
+	elseif L_31_[1] >= 1500 then
+		L_31_[4] = 300
+	end
+	L_1_[23] = (game:GetService("TweenService")):Create(game["Players"]["LocalPlayer"]["Character"]["HumanoidRootPart"], TweenInfo["new"](L_31_[1] / L_31_[4], Enum["EasingStyle"]["Linear"]), {
+		["CFrame"] = L_31_[2]
+	})
+	L_1_[23]:Play()
 end
 L_1_[13] = tick()
 L_1_[35] = (game:GetService("Players"))["LocalPlayer"]
@@ -3958,98 +3714,79 @@ L_1_[32] = function()
 	end
 end
 L_1_[31] = function(L_32_arg0, L_33_arg1, L_34_arg2)
-    -- === LẤY THÔNG TIN NHÂN VẬT ===
-    local char = L_1_[35]["Character"]
-    if not char then 
-        return 
-    end
-    
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    local hum = char:FindFirstChild("Humanoid")
-    if not hrp or not hum then 
-        return 
-    end
-    
-    -- === FIX CHÌM NƯỚC ===
-    if hrp.Position.Y < 15 then
-        hrp.CFrame = CFrame.new(hrp.Position.X, 50, hrp.Position.Z)
-        task.wait(0.05)
-    end
-    
-    -- === HỦY TWEEN CŨ ===
-    if L_1_[47] then
-        pcall(function()
-            L_1_[47]:Cancel()
-            L_1_[47] = nil
-        end)
-    end
-    
-    -- === TÍNH KHOẢNG CÁCH ===
-    local distance = (L_32_arg0.Position - hrp.Position).Magnitude
-    
-    -- === NẾU QUÁ XA (>3000) ===
-    if distance > 3000 and hum.Health > 0 then
-        local entrancePoints = {
-            {Vector3.new(61163.85, 11.67, 1819.78), "Old_World"},
-            {Vector3.new(-4607.82, 872.54, -1667.55), "Old_World"},
-            {Vector3.new(-7894.61, 5547.14, -380.29), "Old_World"},
-            {Vector3.new(923.21, 126.97, 32852.83), "New_World"},
-            {Vector3.new(-2953.31, 41.01, 2099.17), "Old_World"}
-        }
-        for _, point in pairs(entrancePoints) do
-            if _G[point[2]] and (point[1] - L_32_arg0.Position).Magnitude <= 2300 then
-                game.ReplicatedStorage.Remotes.CommF_:InvokeServer("requestEntrance", point[1])
-                break
-            end
-        end
-    end
-    
-    -- === NẾU QUÁ GẦN (<130) ===
-    if distance < 130 then
-        pcall(function()
-            hrp.CFrame = L_32_arg0
-        end)
-        return
-    end
-    
-    -- === TÍNH TỐC ĐỘ TWEEN ===
-    local speed = L_34_arg2 or 300
-    if distance > 1500 then speed = 350 end
-    if distance > 5000 then speed = 500 end
-    if distance > 10000 then speed = 800 end
-    
-    local tweenTime = distance / speed
-    if tweenTime > 30 then tweenTime = 30 end
-    
-    -- === TẠO TWEEN MỚI ===
-    L_1_[47] = game:GetService("TweenService"):Create(
-        hrp, 
-        TweenInfo.new(tweenTime, Enum.EasingStyle.Linear), 
-        {CFrame = L_32_arg0}
-    )
-    L_1_[47]:Play()
-    
-    -- === TIMEOUT TRÁNH TREO ===
-    local startTime = tick()
-    while L_1_[47] and L_1_[47].PlaybackState == Enum.PlaybackState.Playing do
-        if tick() - startTime > 25 then 
-            pcall(function()
-                L_1_[47]:Cancel()
-                L_1_[47] = nil
-            end)
-            break 
-        end
-        task.wait(0.1)
-    end
+	local L_35_ = {}
+	L_35_[10], L_35_[3], L_35_[4] = L_32_arg0, L_33_arg1, L_34_arg2
+	L_35_[12] = 300
+	if L_35_[3] == 1.6 then
+		L_35_[12] = 350
+	end
+	L_35_[11] = L_35_[4] or 130
+	L_35_[9] = L_1_[35]["Character"] and L_1_[35]["Character"]:FindFirstChild("HumanoidRootPart")
+	L_35_[7] = L_1_[35]["Character"] and L_1_[35]["Character"]:FindFirstChild("Humanoid")
+	if not L_35_[9] or not L_35_[7] then
+		return
+	end
+	L_35_[13] = (L_35_[10]["Position"] - L_35_[9]["Position"])["Magnitude"]
+	if L_35_[13] > 3000 and L_35_[7]["Health"] > 0 then
+		local L_36_ = {}
+		L_36_[1] = {
+			{
+				Vector3["new"](61163.85, 11.67, 1819.78),
+				"Old_World"
+			},
+			{
+				Vector3["new"](-4607.82, 872.54, -1667.55);
+				"Old_World"
+			};
+			{
+				Vector3["new"](-7894.61, 5547.14, -380.29),
+				"Old_World"
+			},
+			{
+				Vector3["new"](923.21, 126.97, 32852.83);
+				"New_World"
+			};
+			{
+				Vector3["new"](-2953.31, 41.01, 2099.17);
+				"Old_World"
+			}
+		}
+		for L_37_forvar0, L_38_forvar1 in pairs(L_36_[1]) do
+			local L_39_ = {}
+			L_39_[3], L_39_[1] = L_37_forvar0, L_38_forvar1
+			if _G[L_39_[1][2]] and (L_39_[1][1] - L_35_[10]["Position"])["Magnitude"] <= 2300 then
+				(game:GetService("ReplicatedStorage"))["Remotes"]["CommF_"]:InvokeServer("requestEntrance", L_39_[1][1])
+				break
+			end
+		end
+	end
+	L_1_[13] = tick()
+	L_1_[32]()
+	L_35_[6] = (L_35_[10]["Position"] - L_35_[9]["Position"])["Magnitude"]
+	L_35_[9]["CFrame"] = CFrame["new"](L_35_[9]["Position"]["X"], L_35_[10]["Position"]["Y"], L_35_[9]["Position"]["Z"])
+	if L_35_[6] < 130 then
+		pcall(function()
+			L_35_[9]["CFrame"] = L_35_[10]
+		end)
+		return
+	elseif L_35_[6] < L_35_[11] then
+		L_35_[12] = 350
+	end
+	for L_40_forvar0, L_41_forvar1 in pairs(L_1_[35]["Character"]:GetDescendants()) do
+		local L_42_ = {}
+		L_42_[2], L_42_[3] = L_40_forvar0, L_41_forvar1
+		if L_42_[3]:IsA("BasePart") and L_42_[3]["CanCollide"] then
+			L_42_[3]["CanCollide"] = false
+		end
+	end
+	L_35_[8] = L_35_[6] / L_35_[12]
+	L_35_[2] = TweenInfo["new"](L_35_[8], Enum["EasingStyle"]["Linear"])
+	L_35_[5] = {
+		["CFrame"] = L_35_[10]
+	}
+	L_1_[47] = (game:GetService("TweenService")):Create(L_35_[9], L_35_[2], L_35_[5])
+	L_1_[47]:Play()
 end
--- === ANTI CRASH BAN ĐẦU ===
-pcall(function()
-    game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("SetTeam","Marines")
-end)
-
-print("Haven Hub Loading...")
-
--- ✅ HÀM L_1_[14] BẮT ĐẦU TỪ ĐÂY
 L_1_[14] = function()
 	if God_Human_C_M then
 		local L_43_ = {}
@@ -4330,11 +4067,11 @@ setmetatable(L_1_[45], {
 					until tick() - ticklon >= 1
 					L_125_[1] = function()
 						if getgenv().SettingFarm["HOP Delay"]["Enabled"] then
-    						require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
+    						require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
                             task.wait(TimeHop)
-                            require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+                            require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 						else
-							require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+							require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 						end
 						for L_126_forvar0 = 1, math["huge"], 1 do
 							local L_127_ = {}
@@ -4813,7 +4550,7 @@ for L_195_forvar0, L_196_forvar1 in pairs(L_1_[7]["Remotes"]["CommF_"]:InvokeSer
 end
 L_1_[35]["PlayerGui"]["Notifications"]["Enabled"] = false
 if (((L_1_[7]:WaitForChild("Modules")):WaitForChild("Net")):WaitForChild("RF/FruitCustomizerRF")):InvokeServer({
-	["StorageName"] = "Pure Blue";
+	["StorageName"] = "Pure Red";
 	["Type"] = "AuraSkin";
 	["Context"] = "Equip"
 }) ~= false then
@@ -7984,11 +7721,11 @@ task["spawn"](function()
 							L_1_[45]["wt"](.5)
 							if not L_1_[45]["ffc"](L_1_[40], "Saber Expert") then
 							    if getgenv().SettingFarm["HOP Delay"]["Enabled"] then
-    								require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
+    								require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
                                     task.wait(TimeHop)
-                                    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+                                    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 								else
-								    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+								    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 								end
 								L_1_[45]["wt"](.1)
 								L_1_[10]:Teleport(L_1_[30], L_1_[35])
@@ -8577,11 +8314,11 @@ task["spawn"](function()
 							end
 						else
 							if getgenv().SettingFarm["HOP Delay"]["Enabled"] then
-    							require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
+    							require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
                                 task.wait(TimeHop)
-                                require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+                                require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 							else
-								require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+								require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 							end
 							L_1_[45]["wt"](.1)
 							L_1_[10]:Teleport(L_1_[30], L_1_[35])
@@ -8649,11 +8386,11 @@ task["spawn"](function()
 								L_1_[45]["HopLowServer"](4)
 								wait(.2)
 							    if getgenv().SettingFarm["HOP Delay"]["Enabled"] then
-    								require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
+    								require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
                                     task.wait(TimeHop)
-                                    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+                                    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 								else
-								    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+								    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 								end
 								L_1_[45]["wt"](.1)
 								L_1_[10]:Teleport(L_1_[30], L_1_[35])
@@ -8662,11 +8399,11 @@ task["spawn"](function()
 								L_1_[45]["HopLowServer"](4)
 								wait(.2)
 							    if getgenv().SettingFarm["HOP Delay"]["Enabled"] then
-    								require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
+    								require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
                                     task.wait(TimeHop)
-                                    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+                                    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 								else
-								    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+								    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 								end
 								L_1_[45]["wt"](.1)
 								L_1_[10]:Teleport(L_1_[30], L_1_[35])
@@ -8675,11 +8412,11 @@ task["spawn"](function()
 								L_1_[45]["HopLowServer"](4)
 								wait(.2)
 							    if getgenv().SettingFarm["HOP Delay"]["Enabled"] then
-    								require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
+    								require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
                                     task.wait(TimeHop)
-                                    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+                                    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 								else
-								    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+								    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 								end
 								L_1_[45]["wt"](.1)
 								L_1_[10]:Teleport(L_1_[30], L_1_[35])
@@ -8971,11 +8708,11 @@ task["spawn"](function()
 						L_1_[45]["HopLowServer"](3)
 						L_1_[45]["wt"](.2)
 							if getgenv().SettingFarm["HOP Delay"]["Enabled"] then
-    							require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
+    							require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
                                 task.wait(TimeHop)
-                                require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+                                require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 							else
-								require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+								require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 							end
 						L_1_[45]["wt"](.1)
 						L_1_[10]:Teleport(L_1_[30], L_1_[35])
@@ -9259,11 +8996,11 @@ task["spawn"](function()
 						L_1_[45]["HopLowServer"](3)
 						L_1_[45]["wt"](.2)
 						if getgenv().SettingFarm["HOP Delay"]["Enabled"] then
-    						require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
+    						require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
                             task.wait(TimeHop)
-                            require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+                            require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 						else
-							require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+							require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 						end
 						L_1_[45]["wt"](.1)
 						L_1_[10]:Teleport(L_1_[30], L_1_[35])
@@ -9463,11 +9200,11 @@ task["spawn"](function()
 								return
 							else
 							    if getgenv().SettingFarm["HOP Delay"]["Enabled"] then
-    								require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
+    								require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub:<Color=/> Wait ".. getgenv().TimeHop .."s hop server"):Display()
                                     task.wait(TimeHop)
-                                    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+                                    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 								else
-								    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Haven Hub: Hop!<Color=/>"):Display()
+								    require(game:GetService("ReplicatedStorage").Notification).new("<Color=Red>Lonely Hub: Hop!<Color=/>"):Display()
 								end
 								L_1_[45]["wt"](.1)
 								L_1_[10]:Teleport(L_1_[30], L_1_[35])
@@ -10037,22 +9774,59 @@ task["spawn"](function()
 	end
 end)
 
--- === REDEEM CODE ===
-local redeem = {
-    "SUB2FER999", "ENYU_IS_PRO", "JCWK", "STARCODEHEO", "MAGICBUS", 
-    "KITTGAMING", "SUB2CAPTAINMAUI", "SUB2OFFICIALNOOBIE", "THEGREATACE", 
-    "SUB2NOOBMASTER123", "SUB2DAIGROCK", "AXIORE", "STRAWHATMAINE", 
-    "TANTAIGAMING", "BLUXXY", "SUB2GAMERROBOT_EXP1", "GAMER_ROBOT_1M", 
-    "BIGNEWS", "SECRET_ADMIN", "FUDD10", "WILDDARES"
+redeem = {
+    "SUB2FER999",
+    "ENYU_IS_PRO",
+    "JCWK",
+    "STARCODEHEO",
+    "MAGICBUS",
+    "KITTGAMING",
+    "SUB2CAPTAINMAUI",
+    "SUB2OFFICIALNOOBIE",
+    "THEGREATACE",
+    "SUB2NOOBMASTER123",
+    "SUB2DAIGROCK",
+    "AXIORE",
+    "STRAWHATMAINE",
+    "TANTAIGAMING",
+    "BLUXXY",
+    "SUB2GAMERROBOT_EXP1",
+    "GAMER_ROBOT_1M",
+    "SUBGAMERROBOT_RESET",
+    "RESET_5B",
+    "SUB2GAMERROBOT_RESET1",
+    "SUB2UNCLEKIZARU",
+    "ADMIN_TROLL",
+    "DRAGONABUSE",
+    "DEVSCOOKING",
+    "LIGHTNINGABUSE",
+    "1LOSTADMIN",
+    "ADMINFIGHT",
+    "NOMOREHACK",
+    "BANEXPLOIT",
+    "KRAZYDARES",
+    "TRIPLEABUSE",
+    "24NOADMIN",
+    "REWARDFUN",
+    "CHANDLER",
+    "NEWTROLL",
+    "KITT_RESET",
+    "FUDD10",
+    "FUDD10_V2",
+    "BIGNEWS",
+    "SECRET_ADMIN",
+    "BOSSBUILD",
+    "WILDDARES",
+    "GETPRANKED",
+    "FIGHT4FRUIT",
+    "EARN_FRUITS"
 }
-
-task.spawn(function()
-    for _, code in pairs(redeem) do
-        pcall(function()
-            ReplicatedStorage.Remotes.Redeem:InvokeServer(code)
-        end)
-        task.wait(1.2)
-    end
+task["spawn"](function()
+	for L_647_forvar0, L_648_forvar1 in pairs(redeem) do
+		local L_649_ = {}
+		L_649_[2], L_649_[1] = L_647_forvar0, L_648_forvar1
+		L_1_[46]["Remotes"]["Redeem"]:InvokeServer(L_649_[1])
+	end
 end)
 task["spawn"](function()
 	while L_1_[45]["wt"](150) do
@@ -10126,9 +9900,7 @@ end)
 L_1_[45]["wt"](5)
 _G["Ew"] = false
 Ewx = false
-
--- === MUA ITEM & HAKI ===
-task.spawn(function()
+task["spawn"](function()
 	while L_1_[45]["wt"]() do
 		pcall(function()
 			if L_1_[1]["Value"] >= 2500000 and New_World then
@@ -10136,94 +9908,67 @@ task.spawn(function()
 				L_1_[7]["Remotes"]["CommF_"]:InvokeServer("LegendarySwordDealer", "2")
 				L_1_[7]["Remotes"]["CommF_"]:InvokeServer("LegendarySwordDealer", "3")
 			end
-
-			local setting = getgenv().SettingFarm
-
-			-- Gun
-			if setting["Gun"]["Kabucha"] and L_1_[17]["Value"] >= 10000 and not L_1_[45]["gi"]("Kabucha") then
+			if L_1_[45]["tf"](Configs["Gun"], "Kabucha") and (L_1_[17]["Value"] >= 10000 and not L_1_[45]["gi"]("Kabucha")) then
 				L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BlackbeardReward", "Slingshot", "2")
 			end
-
 			if L_1_[1]["Value"] >= 3000000 then
-				-- Sword
-				local swords = {"Bisento", "Cutlass", "Katana", "Dual Katana", "Soul Cane", 
-				               "Triple Katana", "Iron Mace", "Pipe", "Dual-Headed Blade"}
-				for _, sword in ipairs(swords) do
-					if setting["Sword"][sword] and not L_1_[45]["gi"](sword) then
-						L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", sword)
-					end
+				if L_1_[45]["tf"](Configs["Sword"], "Bisento") and not L_1_[45]["gi"]("Bisento") then
+					L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", "Bisento")
 				end
-
-				-- Gun
-				local guns = {"Musket", "Flintlock", "Refined Slingshot", "Dual Flintlock", "Cannon"}
-				for _, gun in ipairs(guns) do
-					if setting["Gun"][gun] and not L_1_[45]["gi"](gun) then
-						L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", gun)
-					end
+				if L_1_[45]["tf"](Configs["Sword"], "Cutlass") and not L_1_[45]["gi"]("Cutlass") then
+					L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", "Cutlass")
+				end
+				if L_1_[45]["tf"](Configs["Sword"], "Katana") and not L_1_[45]["gi"]("Katana") then
+					L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", "Katana")
+				end
+				if L_1_[45]["tf"](Configs["Sword"], "Dual Katana") and not L_1_[45]["gi"]("Dual Katana") then
+					L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", "Dual Katana")
+				end
+				if L_1_[45]["tf"](Configs["Sword"], "Soul Cane") and not L_1_[45]["gi"]("Soul Cane") then
+					L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", "Soul Cane")
+				end
+				if L_1_[45]["tf"](Configs["Sword"], "Triple Katana") and not L_1_[45]["gi"]("Triple Katana") then
+					L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", "Triple Katana")
+				end
+				if L_1_[45]["tf"](Configs["Sword"], "Iron Mace") and not L_1_[45]["gi"]("Iron Mace") then
+					L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", "Iron Mace")
+				end
+				if L_1_[45]["tf"](Configs["Sword"], "Pipe") and not L_1_[45]["gi"]("Pipe") then
+					L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", "Pipe")
+				end
+				if L_1_[45]["tf"](Configs["Sword"], "Dual-Headed Blade") and not L_1_[45]["gi"]("Dual-Headed Blade") then
+					L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", "Dual-Headed Blade")
+				end
+				if L_1_[45]["tf"](Configs["Gun"], "Musket") and not L_1_[45]["gi"]("Musket") then
+					L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", "Musket")
+				end
+				if L_1_[45]["tf"](Configs["Gun"], "Flintlock") and not L_1_[45]["gi"]("Flintlock") then
+					L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", "Flintlock")
+				end
+				if L_1_[45]["tf"](Configs["Gun"], "Refined Slingshot") and not L_1_[45]["gi"]("Refined Slingshot") then
+					L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", "Refined Slingshot")
+				end
+				if L_1_[45]["tf"](Configs["Gun"], "Dual Flintlock") and not L_1_[45]["gi"]("Dual Flintlock") then
+					L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", "Dual Flintlock")
+				end
+				if L_1_[45]["tf"](Configs["Gun"], "Cannon") and not L_1_[45]["gi"]("Cannon") then
+					L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyItem", "Cannon")
 				end
 			end
-
-			-- Midnight Blade
-			if setting["Sword"]["Midnight Blade"] and L_1_[7]["Remotes"]["CommF_"]:InvokeServer("Ectoplasm", "Check") >= 100 and not L_1_[45]["gi"]("Midnight Blade") then
+			if L_1_[45]["tf"](Configs["Sword"], "Midnight Blade") and (L_1_[7]["Remotes"]["CommF_"]:InvokeServer("Ectoplasm", "Check") >= 100 and not L_1_[45]["gi"]("Midnight Blade")) then
 				L_1_[7]["Remotes"]["CommF_"]:InvokeServer("Ectoplasm", "Buy", 3)
 			end
-
-			-- Haki
 			if not klmdlkgf and L_1_[24]["Value"] >= 2000 then
 				L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyHaki", "Geppo")
 				L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyHaki", "Soru")
 				L_1_[7]["Remotes"]["CommF_"]:InvokeServer("KenTalk", "Buy")
 				klmdlkgf = true
 			end
-
 			if not klmdlkgfx and L_1_[24]["Value"] >= 1000 then
 				L_1_[7]["Remotes"]["CommF_"]:InvokeServer("BuyHaki", "Buso")
 				klmdlkgfx = true
 			end
-
 			L_1_[45]["wt"](100)
 		end)
 	end
 end)
--- ==================== FIX ĐÂM ĐẦU XUỐNG NƯỚC ====================
-task.spawn(function()
-    while task.wait(0.3) do
-        pcall(function()
-            local character = game.Players.LocalPlayer.Character
-            if character and character:FindFirstChild("HumanoidRootPart") and character:FindFirstChild("Humanoid") then
-                local hrp = character.HumanoidRootPart
-                local humanoid = character.Humanoid
-                
-                -- Reset nếu đang ngồi hoặc chìm
-                if humanoid.Sit then
-                    humanoid.Sit = false
-                end
-                
-                -- Nếu Y quá thấp → đẩy lên
-                if hrp.Position.Y < 20 then
-                    hrp.CFrame = hrp.CFrame * CFrame.new(0, 35, 0)
-                    humanoid.PlatformStand = false
-                end
-                
-                -- Anti sink mạnh hơn
-                if hrp:FindFirstChild("Lock") then
-                    hrp.Lock.Velocity = Vector3.new(0, 5, 0) -- Nhẹ nhàng đẩy lên
-                end
-            end
-        end)
-    end
-end)
-
--- FIX LỖI CẮM ĐẦU XUỐNG BIỂN - NÂNG CẤP
-local old_topos = topos or L_1_[31]
-_G.topos = function(cf)
-    if typeof(cf) == "CFrame" then
-        local char = game.Players.LocalPlayer.Character
-        if char and char:FindFirstChild("HumanoidRootPart") then
-            local hrp = char.HumanoidRootPart
-            local targetY = cf.Position.Y
-            local currentY = hrp.Position.Y
-
-            if targetY < 15 or currentY < 15 then
-                local safeY = math.max(targetY, 25)
-                local safeCF = C
