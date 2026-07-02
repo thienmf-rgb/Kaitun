@@ -1083,9 +1083,21 @@ task["spawn"](function()
 	end
 end)
 
-local CoreGui = game:GetService("CoreGui")
-local TweenService = game:GetService("TweenService")
-local StatusGUIGay = CoreGui:FindFirstChild("Status") and CoreGui:FindFirstChild("Haven Hub Btn") and CoreGui:FindFirstChild("CoinCard")
+-- === TEST UI ĐƠN GIẢN ===
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "HavenHubTest"
+ScreenGui.Parent = game:GetService("CoreGui")
+
+local TextLabel = Instance.new("TextLabel")
+TextLabel.Size = UDim2.new(0, 300, 0, 100)
+TextLabel.Position = UDim2.new(0.5, -150, 0.5, -50)
+TextLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.TextColor3 = Color3.fromRGB(0, 255, 255)
+TextLabel.Text = "CON
+TextLabel.TextScaled = true
+TextLabel.Parent = ScreenGui
+
+print("UI Test Created!")
 if StatusGUIGay then
     StatusGUIGay:Destroy()
 end
