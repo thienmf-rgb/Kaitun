@@ -114,7 +114,35 @@ if not getgenv().SettingFarm then
         ["FPS Booster"] = true
     }
 end
+-- === FORCE SHOW UI ===
+print("Haven Hub is loading UI...")
 
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
+
+-- Tạo UI đơn giản để test
+local TestUI = Instance.new("ScreenGui")
+TestUI.Name = "HavenHub_Debug"
+TestUI.ResetOnSpawn = false
+TestUI.Parent = CoreGui
+
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 400, 0, 200)
+Frame.Position = UDim2.new(0.5, -200, 0.5, -100)
+Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 40)
+Frame.BorderSizePixel = 0
+Frame.Parent = TestUI
+
+local Text = Instance.new("TextLabel")
+Text.Size = UDim2.new(1, 0, 1, 0)
+Text.BackgroundTransparency = 1
+Text.Text = "Haven Hub Loaded!\nNếu thấy cái này thì UI hoạt động.\n\nNhấn F9 xem console để biết lỗi."
+Text.TextColor3 = Color3.fromRGB(0, 255, 255)
+Text.TextScaled = true
+Text.Font = Enum.Font.GothamBold
+Text.Parent = Frame
+
+print("✅ Test UI Created!")
 -- === SỬA TASK.WAIT ===
 repeat
     if not game.Players.LocalPlayer.Team then
